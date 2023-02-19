@@ -1,0 +1,95 @@
+.row-css {
+    background-color: gainsboro;
+}
+
+.message-input {
+    position: relative;
+    margin: 10px;
+}
+
+.delete-icon {
+    position: relative;
+    top: 4px;
+    cursor: pointer;
+    margin-right: 6px;
+}
+
+.li-font-size {
+    font-size: 14px;
+}
+
+.horizontal-line {
+    position: relative;
+    margin-right: 10px;
+}
+
+.bi-trash {
+    color: red;
+}
+
+.msg-box {
+    position: relative;
+    top: 13px;
+}
+
+.navbar-box {
+    background-color: darkgray;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.navbar {
+    position: relative;
+    margin: auto;
+}
+
+.download-row {
+    background-color: lavender;
+}
+
+.download-col {
+    position: relative;
+    display: flex;
+}
+
+.download-para {
+    font-size: 15PX;
+    position: relative;
+    top: 6px;
+    font-family: sans-serif;
+    font-weight: bolder;
+}
+
+.download-btn-success {
+    position: relative;
+    left: 10px;
+    outline: none !important;
+}
+
+.plus-btn {
+    outline: none !important;
+}
+
+.submit-btn {
+    outline: none !important;
+}
+
+.number {
+    position: relative;
+    width: 5%;
+    position: relative;
+    left: 18px;
+    height: 26px;
+}
+
+.generate-rows {
+    position: relative;
+    display: flex;
+}
+
+.generate-para {
+    position: relative;
+    left: 10px;
+    font-size: 14px;
+    font-weight: bolder;
+    font-family: sans-serif;
+}

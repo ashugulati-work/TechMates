@@ -1,0 +1,11 @@
+{
+   "ContentType": {
+      "Content-Type": "application/json"
+   },
+   "SERVER_HOST_AND_PORT": "http://localhost:9010/",
+   "createInputMessages": "createInputMessages",
+   "deleteMessage": "deleteMessage/",
+   "getAllMessages": "getAllMessages",
+   "downloadFile": "downloadFile"
+}
+
