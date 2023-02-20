@@ -106,7 +106,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       <div className="row row-css">
         <div className="col-sm msg-box">
         <form className="form-inline" onSubmit={submitFormMessage}>
-        <select class="btn btn-success select-topic" onChange = {onOptionClicked}>
+        <select className="btn btn-success select-topic" onChange = {onOptionClicked}>
           <option  value="">Select Topic</option>
           { topic ? topic.map((topicValue, index) => (
               <option key={index}>
