@@ -6,6 +6,7 @@
    "createInputMessages": "createInputMessages",
    "deleteMessage": "deleteMessage/",
    "getAllMessages": "getAllMessages",
-   "downloadFile": "downloadFile"
+   "downloadFile": "downloadFile",
+   "topic": ["Topic 1, Topic 2, Topic 3"]
 }
 

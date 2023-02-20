@@ -2,15 +2,19 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './MesagesUI.css';
 import { connect } from "react-redux";
 import InputMessages from './InputMessages';
-import { createInputMessages, getAllMessages, downloadFile, downloadDataEmpty } from "../actions/projectActions";
+import { createInputMessages, submitFormData, downloadFile, downloadDataEmpty } from "../actions/projectActions";
+import constant from "../config.json";
 
-const MesagesUI = ({ createInputMessages, getAllMessages, retriveMsg, messages, downloadFile, downloadData, downloadDataEmpty }) => {
+const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, downloadFile, downloadData, downloadDataEmpty }) => {
     const [inputValue, setInputValue] = useState({
       inputMsg: ''
     });
+    const [rowInput, setRowInput] = useState('')
     const [addMessageValue, setAddMessageValue] = useState(false);
     const [plusBtnHide, setPlusBtnHide] = useState(true);
-
+    const [topic, setTopic] = useState([]);
+    const [dropDownValue, setDropDownValue] = useState('');
+    const [disableInputBox, setDisableInputBox] = useState(true);
     const onChangeHandler = (event) => {
       const keys = event.target.name;
       const values = event.target.value;
@@ -19,14 +23,26 @@ const MesagesUI = ({ createInputMessages, getAllMessages, retriveMsg, messages, 
           ...prevState, [keys]: values
         }))
     }
-
+    const onChangeRowHandler = (event) => {
+      const values = event.target.value;
+      setRowInput(values);
+    }
+    
     const { inputMsg } = inputValue;
-    console.log('inputValue ============ ', inputValue);
     useEffect(() => {
       if (inputMsg === '') {
         setPlusBtnHide(true);
       }
     })
+
+    useEffect(() => {
+      if (Object.keys(messages).length > 0) {
+        document.getElementById('generate-rows').style.display = "";
+        document.getElementById('show-error').style.display = "none";
+      } else {
+        document.getElementById('generate-rows').style.display = "none";
+      }
+    }, [messages])
 
     const addMessages = () => {
       setAddMessageValue(true);
@@ -38,17 +54,21 @@ const MesagesUI = ({ createInputMessages, getAllMessages, retriveMsg, messages, 
 
     const submitFormMessage = (event) => {
       event.preventDefault();
-      console.log('submitFormMessage ============ ', inputValue);
-      getAllMessages();
+      if (parseInt(rowInput) === 0 || parseInt(rowInput) > 100) {
+        document.getElementById('show-error').style.display = "";
+        return
+      }
+      document.getElementById('show-error').style.display = "none";
+      if (Object.keys(messages).length > 0 && rowInput && dropDownValue) {
+        submitFormData(messages, rowInput, dropDownValue);
+      }
     }
 
     const downloadFileEventHandler = () => {
       downloadFile();
     }
-    console.log('Outside==== ', downloadData);
     useEffect(() => {
       if (downloadData !== undefined) {
-        console.log('Download Data ', downloadData);
         const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
           JSON.stringify(downloadData)
         )}`;
@@ -59,6 +79,21 @@ const MesagesUI = ({ createInputMessages, getAllMessages, retriveMsg, messages, 
         downloadDataEmpty();
       }
     }, [downloadData])
+
+    const onOptionClicked = (e) => {
+      let targetValue = e.target.value;
+      if (targetValue !== '') {
+        setDisableInputBox(false);
+        setDropDownValue(targetValue);
+      } else {
+        setDisableInputBox(true);
+      }
+    }
+
+    useEffect(() => {
+      let topicValue = constant.topic.map(value => value.split(','));
+      setTopic(topicValue[0]);
+    }, constant.topic)
 
     return (
       <Fragment>
@@ -71,15 +106,23 @@ const MesagesUI = ({ createInputMessages, getAllMessages, retriveMsg, messages, 
       <div className="row row-css">
         <div className="col-sm msg-box">
         <form className="form-inline" onSubmit={submitFormMessage}>
+        <select class="btn btn-success select-topic" onChange = {onOptionClicked}>
+          <option  value="">Select Topic</option>
+          { topic ? topic.map((topicValue, index) => (
+              <option key={index}>
+              {topicValue}
+              </option>
+          )) : ''}
+          </select>
           <div className="form-group mx-sm-3 mb-2">
-            <input type="text" size="70" className="form-control" id="inputMsg" placeholder="Please enter message..." name="inputMsg" onChange={onChangeHandler} value={inputMsg} />
+            <input type="text" disabled={disableInputBox} size="70" className="form-control" id="inputMsg" placeholder="Please enter message..." name="inputMsg" onChange={onChangeHandler} value={inputMsg} />
             <button type="button" disabled={plusBtnHide} id="plusBtn" className="btn btn-sm plus-btn" onClick={addMessages}>
               <span className="glyphicon glyphicon-plus"></span>
             </button>
           </div>
           <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button>
         </form>
-        <div className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number"></input></div>
+        <div id='generate-rows' className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number" onChange={onChangeRowHandler} value={rowInput}></input><p id='show-error' style={{color: "red", left: "23px", top: "2px", position: "relative"}}>Choose between 1 to 100</p></div>
         </div>
       </div>
       <div className="row row-css">
@@ -105,4 +148,4 @@ const mapStateToProps = (state) => {
     }
   };
   
-export default connect(mapStateToProps, { downloadDataEmpty, createInputMessages, getAllMessages, downloadFile })(MesagesUI);
+export default connect(mapStateToProps, { downloadDataEmpty, createInputMessages, submitFormData, downloadFile })(MesagesUI);

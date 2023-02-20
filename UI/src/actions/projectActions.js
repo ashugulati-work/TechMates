@@ -20,7 +20,6 @@ export const createInputMessages = (data) => async (dispatch) => {
     let getResponse = await axios.post(baseURL, body, {
         headers: constant.ContentType
     });
-    console.log('getResponse ------------- ', body, getResponse.data, getResponse.data.length);
     if (getResponse && getResponse.status === 200 && getResponse.data && getResponse.data.length > 0) {
         dispatch({ type: INPUT_MSG_SUCCESS, payload: getResponse.data });
     } else {
@@ -31,7 +30,6 @@ export const createInputMessages = (data) => async (dispatch) => {
 export const deleteMessageValue = (deleteValue) => async (dispatch) => {
     const baseURL = constant.SERVER_HOST_AND_PORT + constant.deleteMessage;
     let getDeletedResponse = await axios.delete(baseURL + deleteValue);
-    console.log('getDeletedResponse ------------- ', getDeletedResponse);
     if (getDeletedResponse && getDeletedResponse.status === 201) {
         dispatch({ type: DELETE_MSG_SUCCESS, payload: getDeletedResponse.data });
     } else {
@@ -39,15 +37,16 @@ export const deleteMessageValue = (deleteValue) => async (dispatch) => {
     }
 };
 
-export const getAllMessages = () => async (dispatch) => {
+export const submitFormData = (messages, rowInput, dropDownValue) => async (dispatch) => {
     const baseURL = constant.SERVER_HOST_AND_PORT + constant.getAllMessages;
-    const config = {
-        method: 'GET',
-        url: baseURL,
-        headers: { "Content-Type": "application/json" }
-    }
-    let getAllMessagesResponse = await axios(config);
-    console.log('getAllMessagesResponse ------------- ', getAllMessagesResponse);
+    let body = {};
+    body['no_of_sentences'] = rowInput;
+    body['sentences'] = messages;
+    body['topic'] = dropDownValue;
+    let getAllMessagesResponse = await axios.post(baseURL + constant.getAllMessages, body, {
+        headers: constant.ContentType
+    });
+
     if (getAllMessagesResponse && getAllMessagesResponse.status === 200) {
         dispatch({ type: RETRIVE_MSG_SUCCESS, payload: getAllMessagesResponse.data });
     } else {
@@ -63,7 +62,6 @@ export const downloadFile = () => async (dispatch) => {
         headers: { "Content-Type": "application/json" }
     }
     let getDownloadResponse = await axios(config);
-    console.log('getDownloadResponse ------------- ', getDownloadResponse);
     if (getDownloadResponse && getDownloadResponse.status === 200) {
         dispatch({ type: DOWNLOAD_SUCCESS, payload: getDownloadResponse.data });
     } else {
