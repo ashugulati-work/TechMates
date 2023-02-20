@@ -10,27 +10,34 @@ import {
     DOWNLOAD_DATA_EMPTY_SUCCESS
 } from "./action_types";
 
-import axios from "axios";
 import constant from "../config.json";
 
 export const createInputMessages = (data) => async (dispatch) => {
-    let body = {};
-    body['inputMsg'] = data.inputMsg;
-    const baseURL = constant.SERVER_HOST_AND_PORT + constant.createInputMessages;
-    let getResponse = await axios.post(baseURL, body, {
-        headers: constant.ContentType
-    });
-    if (getResponse && getResponse.status === 200 && getResponse.data && getResponse.data.length > 0) {
-        dispatch({ type: INPUT_MSG_SUCCESS, payload: getResponse.data });
-    } else {
-        dispatch({ type: INPUT_MSG_FAIL, payload: 'Error Occured!!!' }); 
-    }
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({sentence: data.inputMsg})
+    };
+    var getResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentence', requestOptions);
+
+    if (getResponse && getResponse.status === 200){
+        getResponse = await getResponse.json()
+        console.log('getResponse ------------- ', getResponse.data, getResponse.data.length);
+        if (getResponse.data && getResponse.data.length > 0){
+            dispatch({ type: INPUT_MSG_SUCCESS, payload: getResponse.data });
+        }
+        }
+    dispatch({ type: INPUT_MSG_FAIL, payload: 'Error Occured!!!' }); 
 };
 
-export const deleteMessageValue = (deleteValue) => async (dispatch) => {
-    const baseURL = constant.SERVER_HOST_AND_PORT + constant.deleteMessage;
-    let getDeletedResponse = await axios.delete(baseURL + deleteValue);
-    if (getDeletedResponse && getDeletedResponse.status === 201) {
+export const deleteMessageValue = (deleteId) => async (dispatch) => {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    var getDeletedResponse = await fetch(constant.SERVER_HOST_AND_PORT+`/api/sentence/${deleteId}`, requestOptions);
+    if (getDeletedResponse && getDeletedResponse.status === 200) {
+        getDeletedResponse = await getDeletedResponse.json()
         dispatch({ type: DELETE_MSG_SUCCESS, payload: getDeletedResponse.data });
     } else {
         dispatch({ type: DELETE_MSG_FAIL, payload: 'Error Occured!!!' }); 
@@ -38,16 +45,15 @@ export const deleteMessageValue = (deleteValue) => async (dispatch) => {
 };
 
 export const submitFormData = (messages, rowInput, dropDownValue) => async (dispatch) => {
-    const baseURL = constant.SERVER_HOST_AND_PORT + constant.getAllMessages;
-    let body = {};
-    body['no_of_sentences'] = rowInput;
-    body['sentences'] = messages;
-    body['topic'] = dropDownValue;
-    let getAllMessagesResponse = await axios.post(baseURL + constant.getAllMessages, body, {
-        headers: constant.ContentType
-    });
-
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({no_of_sentences:rowInput, sentences: messages, topic: dropDownValue })
+    };
+    var getAllMessagesResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentences', requestOptions);
+    
     if (getAllMessagesResponse && getAllMessagesResponse.status === 200) {
+        getAllMessagesResponse = await getAllMessagesResponse.json()
         dispatch({ type: RETRIVE_MSG_SUCCESS, payload: getAllMessagesResponse.data });
     } else {
         dispatch({ type: RETRIVE_MSG_FAIL, payload: 'Error Occured!!!' }); 
@@ -55,14 +61,13 @@ export const submitFormData = (messages, rowInput, dropDownValue) => async (disp
 };
 
 export const downloadFile = () => async (dispatch) => {
-    const baseURL = constant.SERVER_HOST_AND_PORT + constant.downloadFile;
-    const config = {
+    const requestOptions = {
         method: 'GET',
-        url: baseURL,
-        headers: { "Content-Type": "application/json" }
-    }
-    let getDownloadResponse = await axios(config);
+        headers: { 'Content-Type': 'application/json' },
+    };
+    var getDownloadResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentence_file', requestOptions);
     if (getDownloadResponse && getDownloadResponse.status === 200) {
+        getDownloadResponse = await getDownloadResponse.json()
         dispatch({ type: DOWNLOAD_SUCCESS, payload: getDownloadResponse.data });
     } else {
         dispatch({ type: DOWNLOAD_FAIL, payload: 'Error Occured!!!' }); 
