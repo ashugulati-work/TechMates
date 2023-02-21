@@ -71,6 +71,7 @@
 
 .submit-btn {
     outline: none !important;
+    margin-right: 5px;
 }
 
 .number {
@@ -93,3 +94,25 @@
     font-weight: bolder;
     font-family: sans-serif;
 }
+
+.spinner {
+    float: right;
+    position: relative;
+    width: 33px;
+    padding: 5px;
+    background: linear-gradient(45deg, #00008B, transparent);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    --_m: conic-gradient(#0000,#000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    box-sizing: border-box;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }

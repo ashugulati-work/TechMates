@@ -15,6 +15,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     const [topic, setTopic] = useState([]);
     const [dropDownValue, setDropDownValue] = useState('');
     const [disableInputBox, setDisableInputBox] = useState(true);
+    const [showSpinner, setShowSpinner] = useState(false);
     const onChangeHandler = (event) => {
       const keys = event.target.name;
       const values = event.target.value;
@@ -36,6 +37,12 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     })
 
     useEffect(() => {
+      if (Object.keys(retriveMsg).length > 0) {
+        setShowSpinner(true);
+      }
+    }, [retriveMsg])
+
+    useEffect(() => {
       if (Object.keys(messages).length > 0) {
         document.getElementById('generate-rows').style.display = "";
         document.getElementById('show-error').style.display = "none";
@@ -54,7 +61,9 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
 
     const submitFormMessage = (event) => {
       event.preventDefault();
+      setShowSpinner(true);
       if (parseInt(rowInput) <= 0 || parseInt(rowInput) > 100) {
+        setShowSpinner(false);
         document.getElementById('show-error').style.display = "";
         return
       }
@@ -121,6 +130,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
             </button>
           </div>
           <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button>
+          {showSpinner ? <div className='spinner'></div> : ''}
         </form>
         <div id='generate-rows' className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number" onChange={onChangeRowHandler} value={rowInput}></input><p id='show-error' style={{color: "red", left: "23px", top: "2px", position: "relative"}}>Choose between 1 to 100</p></div>
         </div>
