@@ -9,7 +9,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     const [inputValue, setInputValue] = useState({
       inputMsg: ''
     });
-    const [rowInput, setRowInput] = useState('')
+    const [rowInput, setRowInput] = useState(5)
     const [addMessageValue, setAddMessageValue] = useState(false);
     const [plusBtnHide, setPlusBtnHide] = useState(true);
     const [topic, setTopic] = useState([]);
@@ -54,7 +54,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
 
     const submitFormMessage = (event) => {
       event.preventDefault();
-      if (parseInt(rowInput) === 0 || parseInt(rowInput) > 100) {
+      if (parseInt(rowInput) <= 0 || parseInt(rowInput) > 100) {
         document.getElementById('show-error').style.display = "";
         return
       }
