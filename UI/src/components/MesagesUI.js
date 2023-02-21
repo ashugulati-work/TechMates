@@ -16,6 +16,24 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     const [dropDownValue, setDropDownValue] = useState('');
     const [disableInputBox, setDisableInputBox] = useState(true);
     const [showSpinner, setShowSpinner] = useState(false);
+
+    const [selectedTone, setSelectedTone] = useState('neutral');
+    
+    const [keywords, setKeywords] = useState([]);
+    const [newKeyword, setNewKeyword] = useState('');
+
+    const handleNewKeywordChange = (event) => {
+      setNewKeyword(event.target.value);
+    };
+  
+    const handleAddKeyword = () => {
+      if (newKeyword.trim() !== '') {
+        setKeywords((prevKeywords) => [...prevKeywords, newKeyword.trim()]);
+        console.log("keywords....", keywords)
+        setNewKeyword('');
+      }
+    };
+
     const onChangeHandler = (event) => {
       const keys = event.target.name;
       const values = event.target.value;
@@ -24,6 +42,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
           ...prevState, [keys]: values
         }))
     }
+   
     const onChangeRowHandler = (event) => {
       const values = event.target.value;
       setRowInput(values);
@@ -61,6 +80,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
 
     const submitFormMessage = (event) => {
       event.preventDefault();
+      console.log("keywords....", keywords)
       setShowSpinner(true);
       if (parseInt(rowInput) <= 0 || parseInt(rowInput) > 100) {
         setShowSpinner(false);
@@ -69,7 +89,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       }
       document.getElementById('show-error').style.display = "none";
       if (Object.keys(messages).length > 0 && rowInput && dropDownValue) {
-        submitFormData(messages, rowInput, dropDownValue);
+        submitFormData(messages, rowInput, dropDownValue, selectedTone, keywords);
       }
     }
 
@@ -98,6 +118,10 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
         setDisableInputBox(true);
       }
     }
+
+  function handleToneChange(event){
+    setSelectedTone(event.target.value);
+  }
 
     useEffect(() => {
       let topicValue = constant.topic.map(value => value.split(','));
@@ -129,11 +153,33 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
               <span className="glyphicon glyphicon-plus"></span>
             </button>
           </div>
-          <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button>
-          {showSpinner ? <div className='spinner'></div> : ''}
+        <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button>
+          {/* {showSpinner ? <div className='spinner'></div> : ''} */}
         </form>
+        <div className="tone">
+          <label>
+          <span className="tone__label_name">Tone:  </span>
+            <input type="radio" name="tone" value="negative" checked={selectedTone === 'negative'} onChange={handleToneChange} />
+            <span className="tone__label">Negative</span>
+          </label>
+          <label>
+            <input type="radio" name="tone" value="neutral" checked={selectedTone === 'neutral'} onChange={handleToneChange} />
+            <span className="tone__label">Neutral</span>
+          </label>
+          <label>
+            <input type="radio" name="tone" value="positive" checked={selectedTone === 'positive'} onChange={handleToneChange} />
+            <span className="tone__label">Positive</span>
+          </label>
+        </div>
+        <div className="form-group mx-sm-3 mb-4">
+            <input type="text" className="form-control" placeholder="Add keywords..." name="keywords" onChange={handleNewKeywordChange} value={newKeyword} />
+            <button type="button" id="plusBtn" className="btn btn-sm plus-btn" onClick={handleAddKeyword}>
+              <span className="glyphicon glyphicon-plus"></span>
+            </button>
+        </div>
         <div id='generate-rows' className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number" onChange={onChangeRowHandler} value={rowInput}></input><p id='show-error' style={{color: "red", left: "23px", top: "2px", position: "relative"}}>Choose between 1 to 100</p></div>
         </div>
+
       </div>
       <div className="row row-css">
         <div className="col-lg-6 message-input">

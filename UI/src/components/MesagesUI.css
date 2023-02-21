@@ -116,3 +116,38 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .tone {
+    display: flex;
+  }
+  
+  .tone label {
+    display: flex;
+    align-items: center;
+    /* margin-right: 10px; */
+  }
+
+  .tone__label {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: none;
+    color: #81c2f1;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .tone__label_name {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: none;
+  }
+
+  .tone__label:hover {
+    color: #007bff;
+  }
+  
+  .tone__label input[type="radio"] {
+    display: none;
+  }

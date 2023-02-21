@@ -44,11 +44,11 @@ export const deleteMessageValue = (deleteId) => async (dispatch) => {
     }
 };
 
-export const submitFormData = (messages, rowInput, dropDownValue) => async (dispatch) => {
+export const submitFormData = (messages, rowInput, dropDownValue, tone, keywords) => async (dispatch) => {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({no_of_sentences:rowInput, sentences: messages, topic: dropDownValue })
+        body: JSON.stringify({no_of_sentences:rowInput, sentences: messages, topic: dropDownValue, tone: selectedTone, keywords: keywords })
     };
     var getAllMessagesResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentences', requestOptions);
     
