@@ -52,9 +52,15 @@ export const submitFormData = (messages, rowInput, dropDownValue) => async (disp
     };
     var getAllMessagesResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentences', requestOptions);
     
-    if (getAllMessagesResponse && getAllMessagesResponse.status === 200) {
+    const requestOptionsEmpty = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    var getDeletedResponse = await fetch(constant.SERVER_HOST_AND_PORT+`/api/sentence`, requestOptionsEmpty);
+
+    if (getAllMessagesResponse && getAllMessagesResponse.status === 200 && getDeletedResponse && getDeletedResponse.status === 200) {
         getAllMessagesResponse = await getAllMessagesResponse.json()
-        dispatch({ type: RETRIVE_MSG_SUCCESS, payload: getAllMessagesResponse.data });
+        dispatch({ type: RETRIVE_MSG_SUCCESS, payload: {getInputMsg:[], retriveMsg:getAllMessagesResponse.data }});
     } else {
         dispatch({ type: RETRIVE_MSG_FAIL, payload: 'Error Occured!!!' }); 
     }

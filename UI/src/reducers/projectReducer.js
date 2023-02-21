@@ -51,10 +51,10 @@ const projectReducer = (state = initialState, action) => {
         ...state
       };
     case RETRIVE_MSG_SUCCESS:
-      retriveMsg = [...payload];
+      // getInputMsg, retriveMsg = [...payload];
       return {
         ...state,
-        retriveMsg
+       ...payload
       };
     case RETRIVE_MSG_FAIL:
       return {
