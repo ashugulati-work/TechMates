@@ -39,7 +39,11 @@ def delete_sentence(id):
         return jsonify({'data': input_sentences, "message": "Successful"}),200
     except IndexError:
         return jsonify({"message": "Incorrect id"}),400
-   
+    
+@app.route('/api/sentence',methods=['DELETE'])
+def delete_sentences():
+    input_sentences.clear()
+    return jsonify({'data': input_sentences, "message": "Successful"}),200
 
 @app.route('/api/sentences',methods=['POST'])
 def generate_sentences():
@@ -69,20 +73,22 @@ def generate_sentences():
         output_prompt += sent+ "\n"
         # print(output_prompt)
 
-    openai_response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt = output_prompt,
-    temperature=temperature,
-    max_tokens=20,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
-    )
-    output_sentences = openai_response.choices[0]['text'].split('\n')
-    output_sentences = [item for item in output_sentences if item != ""]
+    # openai_response = openai.Completion.create(
+    # model="text-davinci-003",
+    # prompt = output_prompt,
+    # temperature=temperature,
+    # max_tokens=20,
+    # top_p=1,
+    # frequency_penalty=0,
+    # presence_penalty=0
+    # )
+    # output_sentences = openai_response.choices[0]['text'].split('\n')
+    # output_sentences = [item for item in output_sentences if item != ""]
 
-    # for i in range(1, 10):
-    #    output_sentences += sentences
+    # code for testing API (to save the tokens)
+    output_sentences = []
+    for i in range(1, 3):
+       output_sentences += sentences
 
     # Open the file in write mode
     with open("sentences.txt", "w") as file:
@@ -91,7 +97,7 @@ def generate_sentences():
             file.write(sentence + "\n")
     #     file.close()
 
-    response = jsonify({'data': output_sentences, "message": "Successful"}),200
+    response = jsonify({'data': output_sentences[:5], "message": "Successful"}),200
     # Cache the response with the cache key
     cache.set(cache_key, response, timeout=300)  # Cache the response for 5 minutes
     return response
