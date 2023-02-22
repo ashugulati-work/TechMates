@@ -126,4 +126,4 @@ def get_file():
     return jsonify({'data': output_sentences, "message": "Successful"}),200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=8081)
