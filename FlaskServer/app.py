@@ -55,40 +55,45 @@ def generate_sentences():
     if cached_response:
         return cached_response
     
-    if 'no_of_sentences' in request.json and 'sentences' in request.json and 'topic' in request.json:
+    if 'no_of_sentences' in request.json and 'sentences' in request.json and 'topic' in request.json and 'keywords' in request.json:
         no_of_sentences = request.json["no_of_sentences"]
         sentences = request.json["sentences"]
-        topic = request.json["topic"]
+        tone = request.json["tone"]
+        topic_name = request.json["topic"]
+        keywords = request.json["keywords"]
     else:
         return jsonify({'message':"Bad Request, Provide all the required fields"}),400
     
     temperature = 0.7
     if 'temperature' in request.json:
         temperature = request.json["temperature"]
-
-
-    sentences.append(f'Generate {no_of_sentences} sentences')
-    output_prompt = ""
+   
+    output_prompt = f"""Generate {no_of_sentences} additional sentences for {topic_name}. Use the following sentences as a reference:
+"""
     for sent in sentences:
         output_prompt += sent+ "\n"
-        # print(output_prompt)
 
-    # openai_response = openai.Completion.create(
-    # model="text-davinci-003",
-    # prompt = output_prompt,
-    # temperature=temperature,
-    # max_tokens=20,
-    # top_p=1,
-    # frequency_penalty=0,
-    # presence_penalty=0
-    # )
-    # output_sentences = openai_response.choices[0]['text'].split('\n')
-    # output_sentences = [item for item in output_sentences if item != ""]
+    keywords_string = ','.join([str(elem) for elem in keywords])
+
+    output_prompt += f"""Focus on aspects such as {keywords_string}. Please write in a {tone} tone."""
+    print(output_prompt)
+
+    openai_response = openai.Completion.create(
+    model="text-davinci-003",
+    prompt = output_prompt,
+    temperature=0.7,
+    max_tokens=3873,
+    top_p=1,
+    frequency_penalty=0,
+    presence_penalty=0
+    )
+    output_sentences = openai_response.choices[0]['text'].split('\n')
+    output_sentences = [item for item in output_sentences if item != ""]
 
     # code for testing API (to save the tokens)
-    output_sentences = []
-    for i in range(1, 3):
-       output_sentences += sentences
+    # output_sentences = []
+    # for i in range(1, 3):
+    #    output_sentences += sentences
 
     # Open the file in write mode
     with open("sentences.txt", "w") as file:
