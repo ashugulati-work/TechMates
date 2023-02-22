@@ -125,5 +125,5 @@ def get_file():
     output_sentences = [line.strip() for line in lines]
     return jsonify({'data': output_sentences, "message": "Successful"}),200
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+# if __name__ == '__main__':
+#     app.run(debug=True, port=5000)
