@@ -69,6 +69,18 @@
     outline: none !important;
 }
 
+.long-button {
+    width: 300px; /* Set the width of the button as desired */
+    height: 30px; /* Set the height of the button as desired */
+    font-size: 18px; /* Set the font size of the button as desired */
+    background-color: #4CAF50; /* Set the background color of the button */
+    color: white; /* Set the text color of the button */
+    border: none; /* Remove the button border */
+    border-radius: 5px; /* Set the border radius of the button */
+    cursor: pointer; /* Add a cursor pointer to the button */
+  }
+  
+
 .submit-btn {
     outline: none !important;
     margin-right: 5px;

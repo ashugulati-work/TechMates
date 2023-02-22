@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import './MesagesUI.css';
 import { connect } from "react-redux";
 import InputMessages from './InputMessages';
+import InputText from './InputText';
 import { createInputMessages, submitFormData, downloadFile, downloadDataEmpty } from "../actions/projectActions";
 import constant from "../config.json";
 
@@ -12,6 +13,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     const [rowInput, setRowInput] = useState(5)
     const [addMessageValue, setAddMessageValue] = useState(false);
     const [plusBtnHide, setPlusBtnHide] = useState(true);
+
     const [topic, setTopic] = useState([]);
     const [dropDownValue, setDropDownValue] = useState('');
     const [disableInputBox, setDisableInputBox] = useState(true);
@@ -21,8 +23,10 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     
     const [keywords, setKeywords] = useState([]);
     const [newKeyword, setNewKeyword] = useState('');
+    const [plusBtnHideKeyword, setPlusBtnHideKeyword] = useState(true);
 
     const handleNewKeywordChange = (event) => {
+      setPlusBtnHideKeyword(false);
       setNewKeyword(event.target.value);
     };
   
@@ -52,6 +56,9 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     useEffect(() => {
       if (inputMsg === '') {
         setPlusBtnHide(true);
+      }
+      if(newKeyword === ''){
+        setPlusBtnHideKeyword(true)
       }
     })
 
@@ -93,6 +100,15 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       }
     }
 
+    useEffect(()=>{
+      console.log("retriveMsg from use effect",retriveMsg);
+      console.log("message from use effect", messages);
+
+      if (Object.keys(retriveMsg).length >0 && Object.keys(messages).length == 0){
+          setShowSpinner(false);
+      }
+    },[retriveMsg, messages])
+
     const downloadFileEventHandler = () => {
       downloadFile();
     }
@@ -131,15 +147,18 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     return (
       <Fragment>
       <div className="container">
+
       <div className="row navbar-box">
       <nav className="navbar navbar-expand-lg navbar-light">
         <h3>Framework to generate synthetic text data using Generative AI technologies</h3>
       </nav>
       </div>
+
       <div className="row row-css">
-        <div className="col-sm msg-box">
-        <form className="form-inline" onSubmit={submitFormMessage}>
-        <select className="btn btn-success select-topic" onChange = {onOptionClicked}>
+      <div className="col-sm msg-box">
+  
+      <div className="form-inline">
+        <select className="btn btn-success select-topic " onChange = {onOptionClicked}>
           <option  value="">Select Topic</option>
           { topic ? topic.map((topicValue, index) => (
               <option key={index}>
@@ -147,15 +166,27 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
               </option>
           )) : ''}
           </select>
-          <div className="form-group mx-sm-3 mb-2">
+          <InputText size="250px" placeHolder="Add keywords.." onHandleChange={handleNewKeywordChange} onHandleClick={handleAddKeyword} value={newKeyword} disableInputBox={disableInputBox} plusBtnHide={plusBtnHideKeyword} />
+      </div><br/>
+          {/* <div className="form-group mx-sm-3 mb-2">
             <input type="text" disabled={disableInputBox} size="70" className="form-control" id="inputMsg" placeholder="Please enter message..." name="inputMsg" onChange={onChangeHandler} value={inputMsg} />
             <button type="button" disabled={plusBtnHide} id="plusBtn" className="btn btn-sm plus-btn" onClick={addMessages}>
               <span className="glyphicon glyphicon-plus"></span>
             </button>
-          </div>
-        <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button>
-          {/* {showSpinner ? <div className='spinner'></div> : ''} */}
-        </form>
+          </div> */}
+      
+      <div className="form-inline">
+      <InputText size="500px" placeHolder="Add Sample senetnces.." onHandleChange={onChangeHandler} onHandleClick={addMessages} value={inputMsg} disableInputBox={disableInputBox} plusBtnHide={plusBtnHide} />
+      </div><br/>
+      {showSpinner ? <div className='spinner'></div> : ''}
+         
+        {/* <div className="form-group mx-sm-3 mb-4">
+            <input type="text" className="form-control"  placeholder="Add keywords..." name="keywords" onChange={handleNewKeywordChange} value={newKeyword} />
+            <button type="button" id="plusBtn" className="btn btn-sm plus-btn" onClick={handleAddKeyword}>
+              <span className="glyphicon glyphicon-plus"></span>
+            </button>
+        </div> */}
+        
         <div className="tone">
           <label>
           <span className="tone__label_name">Tone:  </span>
@@ -170,16 +201,25 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
             <input type="radio" name="tone" value="positive" checked={selectedTone === 'positive'} onChange={handleToneChange} />
             <span className="tone__label">Positive</span>
           </label>
-        </div>
-        <div className="form-group mx-sm-3 mb-4">
-            <input type="text" className="form-control" placeholder="Add keywords..." name="keywords" onChange={handleNewKeywordChange} value={newKeyword} />
-            <button type="button" id="plusBtn" className="btn btn-sm plus-btn" onClick={handleAddKeyword}>
-              <span className="glyphicon glyphicon-plus"></span>
-            </button>
-        </div>
-        <div id='generate-rows' className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number" onChange={onChangeRowHandler} value={rowInput}></input><p id='show-error' style={{color: "red", left: "23px", top: "2px", position: "relative"}}>Choose between 1 to 100</p></div>
-        </div>
+        </div> <br/>
 
+      <div id='generate-rows' className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number" onChange={onChangeRowHandler} value={rowInput}></input><p id='show-error' style={{color: "red", left: "23px", top: "2px", position: "relative"}}>Choose between 1 to 100</p></div>
+        {/* <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button> */}
+      
+      <form className="form-inline" onSubmit={submitFormMessage}>
+      <button type="submit" class="long-button">Generate sentence</button>
+      </form><br/><br/>
+     
+      
+      <div className='form-inline'>
+      {(Object.keys(keywords).length > 0) && <span className="tone__label_name">Keywords:  </span>}
+      <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
+        {keywords.map((keyword, index) => (
+          <li key={index} style={{display: 'inline-block', margin: '0 5px', padding: '4px 8px', backgroundColor: 'white', borderRadius: '8px'}}>
+            {keyword}
+          </li>
+        ))}
+      </ul>
       </div>
       <div className="row row-css">
         <div className="col-lg-6 message-input">
@@ -197,6 +237,8 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
                 {{backgroundColor: '#f2f2f2', padding: '10px', marginBottom: '5px'}}>{row}</div>
             })
         }
+    </div>
+    </div>
     </div>
     </Fragment>
     )
