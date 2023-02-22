@@ -21,6 +21,9 @@ app = Flask(__name__)
 CORS(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
+@app.route('/',methods=['GET'])
+def welcome():
+    return "Welcome to synth-api",200
 
 @app.route('/api/sentence',methods=['POST'])
 def add_sentence():
