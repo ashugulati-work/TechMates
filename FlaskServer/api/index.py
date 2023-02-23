@@ -56,6 +56,7 @@ def generate_sentences():
     if cached_response:
         return cached_response
     
+    print("request.json", request.json)
     if 'no_of_sentences' in request.json and 'sentences' in request.json and 'topic' in request.json and 'keywords' in request.json:
         no_of_sentences = request.json["no_of_sentences"]
         sentences = request.json["sentences"]
@@ -79,32 +80,30 @@ def generate_sentences():
     output_prompt += f"""Focus on aspects such as {keywords_string}. Please write in a {tone} tone."""
     print(output_prompt)
 
-    openai_response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt = output_prompt,
-    temperature=0.7,
-    max_tokens=3873,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
-    )
-    output_sentences = openai_response.choices[0]['text'].split('\n')
-    output_sentences = [item for item in output_sentences if item != ""]
+    # openai_response = openai.Completion.create(
+    # model="text-davinci-003",
+    # prompt = output_prompt,
+    # temperature=0.7,
+    # max_tokens=3873,
+    # top_p=1,
+    # frequency_penalty=0,
+    # presence_penalty=0
+    # )
+    # output_sentences = openai_response.choices[0]['text'].split('\n')
+    # output_sentences = [item for item in output_sentences if item != ""]
 
     # code for testing API (to save the tokens)
-    # output_sentences = []
-    # for i in range(1, 100):
-    #    output_sentences += sentences
+    output_sentences = []
+    for i in range(1, 100):
+       output_sentences += sentences
 
-    tmp_folder = "/tmp"  # Update this with the path of your tmp folder
+    tmp_folder = "tmp"  # Update this with the path of your tmp folder
 
     if not os.path.exists(tmp_folder):
         os.makedirs(tmp_folder)
 
     filename = "sentences.txt"
     filepath = os.path.join(tmp_folder, filename)
-
-    print("-----filepath---",filepath)
 
     # Open the file in write mode
     with open(filepath, "w") as file:
@@ -120,7 +119,7 @@ def generate_sentences():
 @app.route('/api/sentence_file')
 def get_file():
     # Path to the PDF file on the server
-    file_path = 'sentences.txt'
+    file_path= os.path.join("tmp", "sentences.txt")
     # # Use Flask's send_file function to send the file as a response
     return send_file(file_path, as_attachment=True)
 

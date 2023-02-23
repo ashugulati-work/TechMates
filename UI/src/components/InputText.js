@@ -1,4 +1,5 @@
 import React from 'react'
+import '../styles/styles.css'
 
 function InputText(props) {
   return (
@@ -11,5 +12,5 @@ function InputText(props) {
 
   )
 }
-{/* <InputText size="600px" onHandleChange={onChangeHandler} onHandleClick={addMessages} disableInputBox={disableInputBox} plusBtnHide={plusBtnHide} /> */}
+
 export default InputText

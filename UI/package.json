@@ -44,7 +44,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "@svgr/webpack": "^6.5.1"
+    "@svgr/webpack": "^6.5.1",
+    "less-loader": "^11.1.0"
   },
   "overrides": {
     "@svgr/webpack": "$@svgr/webpack"

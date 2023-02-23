@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
-import './MesagesUI.css';
+import '../styles/styles.css';
 import { connect } from "react-redux";
 import { deleteMessageValue } from "../actions/projectActions";
 
