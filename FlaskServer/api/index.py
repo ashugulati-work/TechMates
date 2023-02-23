@@ -97,7 +97,7 @@ def generate_sentences():
     # for i in range(1, 100):
     #    output_sentences += sentences
 
-    tmp_folder = "api/tmp"  # Update this with the path of your tmp folder
+    tmp_folder = "/tmp"  # Update this with the path of your tmp folder
 
     if not os.path.exists(tmp_folder):
         os.makedirs(tmp_folder)
@@ -119,7 +119,7 @@ def generate_sentences():
 @app.route('/api/sentence_file')
 def get_file():
     # Path to the PDF file on the server
-    file_path= os.path.join("tmp", "sentences.txt")
+    file_path= os.path.join("./tmp", "sentences.txt")
     # # Use Flask's send_file function to send the file as a response
     return send_file(file_path, as_attachment=True)
 
