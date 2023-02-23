@@ -97,9 +97,18 @@ def generate_sentences():
     for i in range(1, 100):
        output_sentences += sentences
 
-    # Open the file in write mode
+    tmp_folder = "/tmp"  # Update this with the path of your tmp folder
 
-    with io.BufferedWriter(open("sentences.txt", "w")) as file:
+    if not os.path.exists(tmp_folder):
+        os.makedirs(tmp_folder)
+
+    filename = "sentences.txt"
+    filepath = os.path.join(tmp_folder, filename)
+
+    print("-----filepath---",filepath)
+
+    # Open the file in write mode
+    with io.BufferedWriter(open(filepath, "w")) as file:
         # Write each sentence to the file on a new line
         for sentence in output_sentences:
             file.write(sentence + "\n")
