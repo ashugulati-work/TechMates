@@ -97,7 +97,7 @@ def generate_sentences():
     # for i in range(1, 100):
     #    output_sentences += sentences
 
-    tmp_folder = "tmp"  # Update this with the path of your tmp folder
+    tmp_folder = "/tmp"  # Update this with the path of your tmp folder
 
     if not os.path.exists(tmp_folder):
         os.makedirs(tmp_folder)
