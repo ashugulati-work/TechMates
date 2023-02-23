@@ -20,6 +20,9 @@ app = Flask(__name__)
 CORS(app)
 cache = Cache(app, config={'CACHE_TYPE': 'simple'})
 
+@app.route('/',methods=['GET'])
+def welcome():
+    return "Welcome to synth-api",200
 
 @app.route('/api/sentence',methods=['POST'])
 def add_sentence():
@@ -122,4 +125,4 @@ def get_file():
     # return jsonify({'data': output_sentences, "message": "Successful"}),200
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
