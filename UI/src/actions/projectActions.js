@@ -20,7 +20,7 @@ export const createInputMessages = (data) => async (dispatch) => {
     };
     var getResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentence', requestOptions);
 
-    if (getResponse && getResponse.status === 200){
+    if (getResponse && getResponse.status === 201){
         getResponse = await getResponse.json()
         console.log('getResponse ------------- ', getResponse.data, getResponse.data.length);
         if (getResponse.data && getResponse.data.length > 0){
@@ -72,9 +72,9 @@ export const downloadFile = () => async (dispatch) => {
         headers: { 'Content-Type': 'application/json' },
     };
     var getDownloadResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentence_file', requestOptions);
-    if (getDownloadResponse && getDownloadResponse.status === 200) {
-        getDownloadResponse = await getDownloadResponse.json()
-        dispatch({ type: DOWNLOAD_SUCCESS, payload: getDownloadResponse.data });
+    if (getDownloadResponse && getDownloadResponse.ok) {
+        getDownloadResponse = await getDownloadResponse.blob();
+        dispatch({ type: DOWNLOAD_SUCCESS, payload: getDownloadResponse });
     } else {
         dispatch({ type: DOWNLOAD_FAIL, payload: 'Error Occured!!!' }); 
     }
