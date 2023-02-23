@@ -1,5 +1,4 @@
 import os
-import io
 import openai
 from dotenv import load_dotenv
 from flask import Flask,request,jsonify,json,send_file
@@ -57,6 +56,7 @@ def generate_sentences():
     if cached_response:
         return cached_response
     
+    print("request.json", request.json)
     if 'no_of_sentences' in request.json and 'sentences' in request.json and 'topic' in request.json and 'keywords' in request.json:
         no_of_sentences = request.json["no_of_sentences"]
         sentences = request.json["sentences"]
@@ -97,9 +97,16 @@ def generate_sentences():
     for i in range(1, 100):
        output_sentences += sentences
 
-    # Open the file in write mode
+    tmp_folder = "tmp"  # Update this with the path of your tmp folder
 
-    with io.BufferedWriter(open("sentences.txt", "w")) as file:
+    if not os.path.exists(tmp_folder):
+        os.makedirs(tmp_folder)
+
+    filename = "sentences.txt"
+    filepath = os.path.join(tmp_folder, filename)
+
+    # Open the file in write mode
+    with open(filepath, "w") as file:
         # Write each sentence to the file on a new line
         for sentence in output_sentences:
             file.write(sentence + "\n")
@@ -112,7 +119,7 @@ def generate_sentences():
 @app.route('/api/sentence_file')
 def get_file():
     # Path to the PDF file on the server
-    file_path = 'sentences.txt'
+    file_path= os.path.join("tmp", "sentences.txt")
     # # Use Flask's send_file function to send the file as a response
     return send_file(file_path, as_attachment=True)
 

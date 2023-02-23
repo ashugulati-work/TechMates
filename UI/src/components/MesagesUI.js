@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState, useRef } from 'react';
-import './MesagesUI.css';
+import '../styles/styles.css';
 import { connect } from "react-redux";
 import InputMessages from './InputMessages';
 import InputText from './InputText';
+import RowText from './RowText';
 import { createInputMessages, submitFormData, downloadFile, downloadDataEmpty } from "../actions/projectActions";
 import constant from "../config.json";
 
@@ -68,15 +69,6 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       }
     }, [retriveMsg])
 
-    useEffect(() => {
-      if (Object.keys(messages).length > 0) {
-        document.getElementById('generate-rows').style.display = "";
-        document.getElementById('show-error').style.display = "none";
-      } else {
-        document.getElementById('generate-rows').style.display = "none";
-      }
-    }, [messages])
-
     const addMessages = () => {
       setAddMessageValue(true);
       createInputMessages(inputValue);
@@ -88,13 +80,9 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     const submitFormMessage = (event) => {
       event.preventDefault();
       console.log("keywords....", keywords)
+      // setKeywords([])
       setShowSpinner(true);
-      if (parseInt(rowInput) <= 0 || parseInt(rowInput) > 100) {
-        setShowSpinner(false);
-        document.getElementById('show-error').style.display = "";
-        return
-      }
-      document.getElementById('show-error').style.display = "none";
+    
       if (Object.keys(messages).length > 0 && rowInput && dropDownValue) {
         submitFormData(messages, rowInput, dropDownValue, selectedTone, keywords);
       }
@@ -157,7 +145,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
 
       <div className="row navbar-box">
       <nav className="navbar navbar-expand-lg navbar-light">
-        <h3>Framework to generate synthetic text data using Generative AI technologies</h3>
+        <h3 style={{color: 'white'}}>SynthAI</h3>
       </nav>
       </div>
 
@@ -165,7 +153,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       <div className="col-sm msg-box">
   
       <div className="form-inline">
-        <select className="btn btn-success select-topic " onChange = {onOptionClicked}>
+        <select className="btn select-topic" style={{border: '1px solid #ccc'}} onChange = {onOptionClicked}>
           <option  value="">Select Topic</option>
           { topic ? topic.map((topicValue, index) => (
               <option key={index}>
@@ -175,24 +163,11 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
           </select>
           <InputText size="250px" placeHolder="Add keywords.." onHandleChange={handleNewKeywordChange} onHandleClick={handleAddKeyword} value={newKeyword} disableInputBox={disableInputBox} plusBtnHide={plusBtnHideKeyword} />
       </div><br/>
-          {/* <div className="form-group mx-sm-3 mb-2">
-            <input type="text" disabled={disableInputBox} size="70" className="form-control" id="inputMsg" placeholder="Please enter message..." name="inputMsg" onChange={onChangeHandler} value={inputMsg} />
-            <button type="button" disabled={plusBtnHide} id="plusBtn" className="btn btn-sm plus-btn" onClick={addMessages}>
-              <span className="glyphicon glyphicon-plus"></span>
-            </button>
-          </div> */}
       
       <div className="form-inline">
       <InputText size="500px" placeHolder="Add Sample senetnces.." onHandleChange={onChangeHandler} onHandleClick={addMessages} value={inputMsg} disableInputBox={disableInputBox} plusBtnHide={plusBtnHide} />
       </div><br/>
-      {showSpinner ? <div className='spinner'></div> : ''}
-         
-        {/* <div className="form-group mx-sm-3 mb-4">
-            <input type="text" className="form-control"  placeholder="Add keywords..." name="keywords" onChange={handleNewKeywordChange} value={newKeyword} />
-            <button type="button" id="plusBtn" className="btn btn-sm plus-btn" onClick={handleAddKeyword}>
-              <span className="glyphicon glyphicon-plus"></span>
-            </button>
-        </div> */}
+      {/* {showSpinner ? <div className='spinner'></div> : ''} */}
         
         <div className="tone">
           <label>
@@ -210,11 +185,16 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
           </label>
         </div> <br/>
 
-      <div id='generate-rows' className='generate-rows'><p className='generate-para'>Generate rows: </p><input type="number" className="number" id="number" onChange={onChangeRowHandler} value={rowInput}></input><p id='show-error' style={{color: "red", left: "23px", top: "2px", position: "relative"}}>Choose between 1 to 100</p></div>
-        {/* <button type="submit" className="btn btn-primary mb-2 submit-btn">Submit</button> */}
       
+      <div id='generate-rows' >
+        <div className='input-range' style={{display: 'flex'}}>
+        <label className="tone__label_name">Generate Rows:  </label>
+        <input style={{width: '15%'}} type="range" min="1" max="100" className="slider" onChange={onChangeRowHandler} value={rowInput} id="myRange" />
+        <input type="text" style={{width: '5%'}} disabled className="form-control range-value" value={rowInput} />
+      </div><br/>
+      </div>
       <form className="form-inline" onSubmit={submitFormMessage}>
-      <button type="submit" class="long-button">Generate sentence</button>
+      <button type="submit" class="long-button" style={{color: 'white'}}>Generate sentence</button>
       </form><br/><br/>
      
       
@@ -222,7 +202,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       {(Object.keys(keywords).length > 0) && <span className="tone__label_name">Keywords:  </span>}
       <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
         {keywords.map((keyword, index) => (
-          <li key={index} style={{display: 'inline-block', margin: '0 5px', padding: '4px 8px', backgroundColor: 'white', borderRadius: '8px'}}>
+          <li key={index} style={{display: 'inline-block', margin: '0 5px', padding: '4px 8px', borderRadius: '8px'}}>
             {keyword}
           </li>
         ))}
@@ -235,13 +215,14 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       </div>
       {(Object.keys(retriveMsg).length > 0) && <div className="row download-row">
         <div className="col-lg-6 download-col">
-          <p className='download-para'>Please download your file: </p><button onClick={downloadFileEventHandler} type="button" className="btn btn-success download-btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-download" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg></button>
+          <p className='download-para'>Please download your file: </p><button onClick={downloadFileEventHandler} type="button" className="btn download-btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-download" viewBox="0 0 16 16"><path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z"/><path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/></svg></button>
         </div>
       </div>}
+      {showSpinner && <> <RowText index='1' row="In Progress"/><div className='spinner'></div>
+      <RowText index='2' row="Generating Sentences...."/></>}
        {
             retriveMsg.map((row, index) => {
-                return<div key={index} style=
-                {{backgroundColor: '#f2f2f2', padding: '10px', marginBottom: '5px'}}>{row}</div>
+                return <RowText index={index} row={row}/>
             })
         }
     </div>
