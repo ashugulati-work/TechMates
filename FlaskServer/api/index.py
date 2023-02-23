@@ -97,14 +97,14 @@ def generate_sentences():
     # for i in range(1, 100):
     #    output_sentences += sentences
 
-    tmp_folder = "/tmp"  # Update this with the path of your tmp folder
+    tmp_folder = "api/tmp"  # Update this with the path of your tmp folder
 
     if not os.path.exists(tmp_folder):
         os.makedirs(tmp_folder)
 
     filename = "sentences.txt"
     filepath = os.path.join(tmp_folder, filename)
-
+    print(filepath)
     # Open the file in write mode
     with open(filepath, "w") as file:
         # Write each sentence to the file on a new line
