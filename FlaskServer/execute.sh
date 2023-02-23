@@ -13,4 +13,4 @@ echo "Installing Requirements"
 pip install -r requirements.txt
 
 echo "Starting flask server"
-python app.py
+python api/index.py
