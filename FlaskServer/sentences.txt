@@ -1,2 +1,10 @@
-1. I would like to book a table in the restaurant for two.
-2. Can
+1. I don't need to book a hotel, I'm staying with family.
+2. I'm not interested in staying at a hotel right now.
+3. I'm not looking to book a hotel room anytime soon.
+4. I don't want to book a hotel for this trip.
+5. I'm not interested in staying at a hotel, I prefer camping.
+6. I'm not looking to book a hotel, I'm staying with friends.
+7. I don't plan on booking a hotel for my next trip.
+8. I don't need to book a hotel, I'm staying in an Airbnb.
+9. I'm not interested in booking a hotel, I'd rather stay in a hostel.
+10. I'm not looking to book a hotel, I'm staying in a cabin.
