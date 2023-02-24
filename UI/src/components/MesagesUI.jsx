@@ -6,6 +6,7 @@ import InputText from './InputText';
 import RowText from './RowText';
 import { createInputMessages, submitFormData, downloadFile, downloadDataEmpty } from "../actions/projectActions";
 import constant from "../config.json";
+import MainHeader from './MainHeader';
 
 const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, downloadFile, downloadData, downloadDataEmpty }) => {
     const [inputValue, setInputValue] = useState({
@@ -138,14 +139,8 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
 
     return (
       <Fragment>
+        <MainHeader/>
       <div className="container">
-
-      <div className="row navbar-box">
-      <nav className="navbar navbar-expand-lg navbar-light">
-        <h3 style={{color: 'white'}}>SynthAI</h3>
-      </nav>
-      </div>
-
       <div className="row row-css">
       <div className="col-sm msg-box">
   
