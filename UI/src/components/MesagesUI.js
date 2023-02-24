@@ -108,7 +108,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "data.csv");
+        link.setAttribute("download", `${dropDownValue}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -150,6 +150,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       <div className="col-sm msg-box">
   
       <div className="form-inline">
+        <div>
         <select className="btn select-topic" style={{border: '1px solid #ccc'}} onChange = {onOptionClicked}>
           <option  value="">Select Topic</option>
           { topic ? topic.map((topicValue, index) => (
@@ -158,6 +159,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
               </option>
           )) : ''}
           </select>
+          </div>
           <InputText size="250px" placeHolder="Add keywords.." onHandleChange={handleNewKeywordChange} onHandleClick={handleAddKeyword} value={newKeyword} disableInputBox={disableInputBox} plusBtnHide={plusBtnHideKeyword} />
       </div><br/>
       
