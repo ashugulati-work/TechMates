@@ -102,21 +102,18 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
     }
     useEffect(() => {
       if (downloadData !== undefined) {
-        const url = window.URL.createObjectURL(new Blob([downloadData]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'filename.csv'); // replace filename with your desired file name
+      
+        const data = downloadData["data"];
+        const csvContent = "data:text/csv;charset=utf-8," + data.join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
         document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
+        downloadDataEmpty();
 
-        // const jsonString = `data:text/json;chatset=utf-8,${encodeURIComponent(
-        //   JSON.stringify(downloadData)
-        // )}`;
-        // const link = document.createElement("a");
-        // link.href = jsonString;
-        // link.download = "data.json";
-        // link.click();
-        // downloadDataEmpty();
       }
     }, [downloadData])
 
@@ -202,7 +199,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       {(Object.keys(keywords).length > 0) && <span className="tone__label_name">Keywords:  </span>}
       <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
         {keywords.map((keyword, index) => (
-          <li key={index} style={{display: 'inline-block', margin: '0 5px', padding: '4px 8px', borderRadius: '8px'}}>
+          <li key={index} className="row-element" style={{display: 'inline-block', margin: '0 5px', padding: '4px 8px', borderRadius: '8px'}}>
             {keyword}
           </li>
         ))}

@@ -13,6 +13,7 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 input_sentences = []
+output_sentences = []
 
 app = Flask(__name__)
 
@@ -65,10 +66,6 @@ def generate_sentences():
         keywords = request.json["keywords"]
     else:
         return jsonify({'message':"Please provide all the required fields"}),400
-    
-    temperature = 0.7
-    if 'temperature' in request.json:
-        temperature = request.json["temperature"]
    
     output_prompt = f"""Generate {no_of_sentences} additional sentences for {topic_name}. Use the following sentences as a reference:
 """
@@ -89,27 +86,19 @@ def generate_sentences():
     frequency_penalty=0,
     presence_penalty=0
     )
-    output_sentences = openai_response.choices[0]['text'].split('\n')
-    output_sentences = [item for item in output_sentences if item != ""]
+    generated_sentences = openai_response.choices[0]['text'].split('\n')
+    # generated_sentences = [item for item in output_sentences if item != ""]
+
+    for item in generated_sentences:
+        if item != "":
+            output_sentences.append(item)
+
+   
 
     # code for testing API (to save the tokens)
     # output_sentences = []
     # for i in range(1, 100):
     #    output_sentences += sentences
-
-    tmp_folder = "tmp"  # Update this with the path of your tmp folder
-
-    if not os.path.exists(tmp_folder):
-        os.makedirs(tmp_folder)
-
-    filename = "sentences.txt"
-    filepath = os.path.join(tmp_folder, filename)
-
-    # Open the file in write mode
-    with open(filepath, "w") as file:
-        # Write each sentence to the file on a new line
-        for sentence in output_sentences:
-            file.write(sentence + "\n")
 
     response = jsonify({'data': output_sentences[:5], "message": "Successful"}),200
     # Cache the response with the cache key
@@ -118,18 +107,16 @@ def generate_sentences():
 
 @app.route('/api/sentence_file')
 def get_file():
-    # Path to the PDF file on the server
-    file_path= os.path.join("tmp", "sentences.txt")
-    # # Use Flask's send_file function to send the file as a response
-    return send_file(file_path, as_attachment=True)
+    print("output sentences", output_sentences)
+    response = jsonify({'data': output_sentences, "message": "Successful"}),200
+   
+    return response
 
-    # with open("sentences.txt", "r") as file:
-    # # Read the lines of the file into a list
-    #     lines = file.readlines()
-
-    # # Remove any newline characters from the end of each line
-    # output_sentences = [line.strip() for line in lines]
-    # return jsonify({'data': output_sentences, "message": "Successful"}),200
+@app.route('/api/sentence_file', methods=["DELETE"])
+def delete_file():
+    # global output_sentences
+    output_sentences.clear()
+    return jsonify({"message": "Successful"}),200
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

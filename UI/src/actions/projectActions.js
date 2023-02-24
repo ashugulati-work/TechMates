@@ -73,11 +73,18 @@ export const downloadFile = () => async (dispatch) => {
     };
     var getDownloadResponse = await fetch(constant.SERVER_HOST_AND_PORT+'/api/sentence_file', requestOptions);
     if (getDownloadResponse && getDownloadResponse.ok) {
-        getDownloadResponse = await getDownloadResponse.blob();
+        // getDownloadResponse = await getDownloadResponse.blob();
+        getDownloadResponse = await getDownloadResponse.json();
         dispatch({ type: DOWNLOAD_SUCCESS, payload: getDownloadResponse });
     } else {
         dispatch({ type: DOWNLOAD_FAIL, payload: 'Error Occured!!!' }); 
     }
+
+    const requestOptionsEmpty = {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+    };
+    await fetch(constant.SERVER_HOST_AND_PORT+`/api/sentence_file`, requestOptionsEmpty);
 };
 
 export const downloadDataEmpty = () => async (dispatch) => {
