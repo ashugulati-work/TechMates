@@ -81,7 +81,7 @@ def generate_sentences():
     openai_response = openai.Completion.create(
     model="text-davinci-003",
     prompt = output_prompt,
-    temperature=0,
+    temperature=0.5,
     max_tokens=3873,
     stop=['101'],
     )
