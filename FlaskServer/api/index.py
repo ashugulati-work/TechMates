@@ -67,24 +67,23 @@ def generate_sentences():
     else:
         return jsonify({'message':"Please provide all the required fields"}),400
    
-    output_prompt = f"""Generate {no_of_sentences} additional sentences for {topic_name}. Use the following sentences as a reference:
-"""
+#     output_prompt = f"""Generate {no_of_sentences} additional sentences for {topic_name}. Use the following sentences as a reference:
+# """
+    output_prompt = ""
     for sent in sentences:
         output_prompt += sent+ "\n"
 
     keywords_string = ','.join([str(elem) for elem in keywords])
-
-    output_prompt += f"""Focus on aspects such as {keywords_string}. Please write in a {tone} tone."""
+    output_prompt = output_prompt + "\n"
+    output_prompt += f"""Generate {no_of_sentences} more sentences for {topic_name}. Focus on aspects such as {keywords_string}. Please write in a {tone} tone."""
     print(output_prompt)
 
     openai_response = openai.Completion.create(
     model="text-davinci-003",
     prompt = output_prompt,
-    temperature=0.7,
+    temperature=0.5,
     max_tokens=3873,
-    top_p=1,
-    frequency_penalty=0,
-    presence_penalty=0
+    stop=['101'],
     )
     generated_sentences = openai_response.choices[0]['text'].split('\n')
     # generated_sentences = [item for item in output_sentences if item != ""]
@@ -93,14 +92,17 @@ def generate_sentences():
         if item != "":
             output_sentences.append(item)
 
-   
-
+    if len(output_sentences) <=5:
+        data = output_sentences
+    else : 
+        data = output_sentences[:5]
+     
     # code for testing API (to save the tokens)
     # output_sentences = []
     # for i in range(1, 100):
     #    output_sentences += sentences
 
-    response = jsonify({'data': output_sentences[:5], "message": "Successful"}),200
+    response = jsonify({'data': data, "message": "Successful"}),200
     # Cache the response with the cache key
     cache.set(cache_key, response, timeout=300)  # Cache the response for 5 minutes
     return response
