@@ -1,5 +1,4 @@
-import { combineReducers } from 'redux'
-import  projectReducer from './projectReducer'
+import {combineReducers} from 'redux'
+import projectReducer from './projectReducer'
 
-export default combineReducers({ projectReducer });
-
+export default combineReducers({projectReducer})
