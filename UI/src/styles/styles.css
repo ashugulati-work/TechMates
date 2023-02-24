@@ -2,6 +2,12 @@
   background-color: hsl(211, 89%, 93%);
   color: hsl(210, 73%, 55%);
 }
+.highlight-data {
+  font-weight: bolder;
+  background-color: hsl(210, 73%, 55%);
+  color: hsl(211, 89%, 93%);
+  font-size: 15px;
+}
 .message-input {
   position: relative;
   margin: 10px;

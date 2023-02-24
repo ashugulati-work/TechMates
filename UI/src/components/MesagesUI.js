@@ -162,7 +162,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       </div><br/>
       
       <div className="form-inline">
-      <InputText size="500px" placeHolder="Add Sample senetnces.." onHandleChange={onChangeHandler} onHandleClick={addMessages} value={inputMsg} disableInputBox={disableInputBox} plusBtnHide={plusBtnHide} />
+      <InputText size="500px" placeHolder="Add sample sentences.." onHandleChange={onChangeHandler} onHandleClick={addMessages} value={inputMsg} disableInputBox={disableInputBox} plusBtnHide={plusBtnHide} />
       </div><br/>
       {/* {showSpinner ? <div className='spinner'></div> : ''} */}
         
@@ -191,7 +191,7 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
       </div><br/>
       </div>
       <form className="form-inline" onSubmit={submitFormMessage}>
-      <button type="submit" class="long-button" style={{color: 'white'}}>Generate sentence</button>
+      <button type="submit" class="long-button" style={{color: 'white'}}>Generate sentences</button>
       </form><br/><br/>
      
       
@@ -216,10 +216,10 @@ const MesagesUI = ({ createInputMessages, submitFormData, retriveMsg, messages, 
         </div>
       </div>}
       {showSpinner && <> <RowText index='1' row="In Progress"/><div className='spinner'></div>
-      <RowText index='2' row="Generating Sentences...."/></>}
+      <RowText index='2' row="Generating Sentences...." /></>}
        {
             retriveMsg.map((row, index) => {
-                return <RowText index={index} row={row}/>
+                return <RowText index={index} row={row} keywords={keywords}/>
             })
         }
     </div>
