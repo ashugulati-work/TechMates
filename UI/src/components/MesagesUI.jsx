@@ -16,23 +16,15 @@ import {
    setSentencesCount,
    setTone,
    setTopicValue,
-   reset,
    resetData
 } from '../app/features/dataSlice'
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
-import {
-   Accordion,
-   AccordionDetails,
-   AccordionSummary,
-   Button,
-   Grid,
-   Typography
-} from '@mui/material'
+import {Button, Grid} from '@mui/material'
 import TopicSelector from './TopicSelector'
 import Result from './Result'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import AccordionWrapper from './AccordionWrapper'
 
 const MesagesUI = () => {
    const {topics} = constant
@@ -117,29 +109,18 @@ const MesagesUI = () => {
                      <CardContent sx={{padding: '24px'}}>
                         <Stack gap={3}>
                            <div className="openai_key">
-                              <Accordion>
-                                 <AccordionSummary
-                                    style={{minHeight: '48px'}}
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="panel1a-content"
-                                    id="panel1a-header">
-                                    <Typography variant="h5" fontWeight="600">
-                                       OpenAI API Key:
-                                    </Typography>
-                                 </AccordionSummary>
-                                 <AccordionDetails>
-                                    <InputText
-                                       id="apikey-input"
-                                       placeHolder="Place your API Key"
-                                       type="password"
-                                       onEdit={handleEdit}
-                                       disableInputBox={isDisabled}
-                                       ref={apiKeyInputRef}
-                                       handleBlur={handleAPIKey}
-                                       isEditable={true}
-                                    />
-                                 </AccordionDetails>
-                              </Accordion>
+                              <AccordionWrapper>
+                                 <InputText
+                                    id="apikey-input"
+                                    placeHolder="Place your API Key"
+                                    type="password"
+                                    onEdit={handleEdit}
+                                    disableInputBox={isDisabled}
+                                    ref={apiKeyInputRef}
+                                    handleBlur={handleAPIKey}
+                                    isEditable={true}
+                                 />
+                              </AccordionWrapper>
 
                               {/* <Grid container spacing={2} alignItems="center">
                                  <Grid item alignContent="center">
@@ -160,6 +141,7 @@ const MesagesUI = () => {
                                     />
                                  </Grid>
                               </Grid> */}
+
                            </div>
                            <div className="topic-selector">
                               <Grid container spacing={2} alignItems="center">
