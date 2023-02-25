@@ -4,7 +4,6 @@ import InputMessages from './InputMessages'
 import RowText from './RowText'
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload'
 import ErrorIcon from '@mui/icons-material/Error'
-import {Stack} from '@mui/system'
 
 const Result = ({retriveMsg, sentences, isLoading, keywords, error}) => {
    const downloadFileEventHandler = () => {
