@@ -1,4 +1,4 @@
-import React, {Fragment, useRef, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import '../styles/styles.css'
 import {useDispatch, useSelector} from 'react-redux'
 import InputText from './InputText'
@@ -82,8 +82,9 @@ const MesagesUI = () => {
 
    const submitFormData = (event) => {
       event.preventDefault()
-      dispatch(getSentencesData({topic, tone, no_of_sentences, keywords, sentences, API_KEY}))
-      // dispatch(reset())
+      if (validated()) {
+         dispatch(getSentencesData({topic, tone, no_of_sentences, keywords, sentences, API_KEY}))
+      }
    }
 
    const handleAPIKey = () => {
@@ -98,6 +99,25 @@ const MesagesUI = () => {
    const handleEdit = () => {
       setIsDisabled(false)
    }
+
+   const validated = () => {
+      if (
+         topic &&
+         tone &&
+         no_of_sentences &&
+         keywords?.length !== 0 &&
+         sentences?.length !== 0 &&
+         API_KEY
+      ) {
+         return true
+      } else {
+         return false
+      }
+   }
+
+   useEffect(() => {
+      validated()
+   }, [topic, tone, no_of_sentences, keywords, sentences, API_KEY])
 
    return (
       <Fragment>
@@ -141,7 +161,6 @@ const MesagesUI = () => {
                                     />
                                  </Grid>
                               </Grid> */}
-
                            </div>
                            <div className="topic-selector">
                               <Grid container spacing={2} alignItems="center">
@@ -185,6 +204,7 @@ const MesagesUI = () => {
                            <Grid container spacing={2} alignItems="center">
                               <Grid item>
                                  <Button
+                                    disabled={!validated()}
                                     onClick={submitFormData}
                                     variant="contained"
                                     sx={{fontSize: '14px'}}>
