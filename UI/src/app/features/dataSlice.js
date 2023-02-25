@@ -52,12 +52,17 @@ export const dataSlice = createSlice({
       setKeywords: (state, action) => {
          state.formData.keywords.push(action.payload)
       },
+      resetData: (state) => {
+         state.formData = initialState.formData
+         state.retriveMsg = initialState.retriveMsg
+         state.isLoading = initialState.isLoading
+         state.error = initialState.error
+      },
       reset: (state) => initialState
    },
    extraReducers: (builder) => {
       builder.addCase(getSentencesData.pending, (state, action) => {
          console.log('Pending')
-         state.formData = initialState.formData
          state.error = initialState.error
          state.isLoading = true
       })
@@ -87,7 +92,9 @@ export const {
    deleteSentence,
    setTopicValue,
    setTone,
-   setKeywords
+   setKeywords,
+   reset,
+   resetData
 } = dataSlice.actions
 
 export default dataSlice.reducer

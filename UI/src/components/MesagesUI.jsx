@@ -16,7 +16,8 @@ import {
    setSentencesCount,
    setTone,
    setTopicValue,
-   reset
+   reset,
+   resetData
 } from '../app/features/dataSlice'
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
@@ -210,7 +211,7 @@ const MesagesUI = () => {
                               </Grid>
                               <Grid item md>
                                  <Button
-                                    onClick={() => dispatch(reset())}
+                                    onClick={() => dispatch(resetData())}
                                     variant="outline"
                                     sx={{fontSize: '14px'}}>
                                     Reset
