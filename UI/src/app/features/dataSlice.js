@@ -53,13 +53,13 @@ export const dataSlice = createSlice({
    extraReducers: (builder) => {
       builder.addCase(getSentencesData.pending, (state, action) => {
          console.log('Pending')
-         //  state.formData = initialState.formData
+         state.formData = initialState.formData
          state.error = initialState.error
          state.isLoading = true
       })
       builder.addCase(getSentencesData.fulfilled, (state, action) => {
          state.isLoading = false
-         state.retriveMsg.push(action.payload) // Bcoz we are getting array of object
+         state.retriveMsg = action.payload // Bcoz we are getting array of object
          state.error = initialState.error
       })
       builder.addCase(getSentencesData.rejected, (state, action) => {

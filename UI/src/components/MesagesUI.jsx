@@ -21,7 +21,7 @@ import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
 
-const MesagesUI = ({downloadFile, downloadData, downloadDataEmpty}) => {
+const MesagesUI = () => {
    const {topics} = constant
    const dispatch = useDispatch()
    const inputComponentRef = useRef()
@@ -74,25 +74,20 @@ const MesagesUI = ({downloadFile, downloadData, downloadDataEmpty}) => {
    const submitFormData = (event) => {
       event.preventDefault()
       dispatch(getSentencesData({topic, tone, no_of_sentences, keywords, sentences}))
+      // dispatch(reset())
    }
 
    const downloadFileEventHandler = () => {
-      downloadFile()
+      const data = retriveMsg
+      const csvContent = 'data:text/csv;charset=utf-8,' + data.join('\n')
+      const encodedUri = encodeURI(csvContent)
+      const link = document.createElement('a')
+      link.setAttribute('href', encodedUri)
+      link.setAttribute('download', `${topic}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
    }
-   useEffect(() => {
-      if (downloadData !== undefined) {
-         const data = downloadData['data']
-         const csvContent = 'data:text/csv;charset=utf-8,' + data.join('\n')
-         const encodedUri = encodeURI(csvContent)
-         const link = document.createElement('a')
-         link.setAttribute('href', encodedUri)
-         link.setAttribute('download', `${dropDownValue}.csv`)
-         document.body.appendChild(link)
-         link.click()
-         document.body.removeChild(link)
-         downloadDataEmpty()
-      }
-   }, [downloadData])
 
    return (
       <Fragment>
@@ -216,9 +211,14 @@ const MesagesUI = ({downloadFile, downloadData, downloadDataEmpty}) => {
                               <RowText index="2" row="Generating Sentences...." />
                            </>
                         )}
-                        {retriveMsg.map((row, index) => {
-                           return <RowText index={index} row={row} keywords={keywords} />
-                        })}
+                       {retriveMsg.length > 5 ? 
+                        retriveMsg.slice(0, 5).map((sentence, index) => {
+                        return <RowText index={index} row={sentence} keywords={keywords} />
+                        }) :
+                        retriveMsg.map((sentence, index) => {
+                           return <RowText index={index} row={sentence} keywords={keywords} />
+                        })
+                        }
                      </CardContent>
                   </Card>
                </div>
