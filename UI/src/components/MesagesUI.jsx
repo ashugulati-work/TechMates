@@ -31,6 +31,8 @@ const MesagesUI = () => {
    const {topics} = constant
    const dispatch = useDispatch()
    const inputComponentRef = useRef()
+   const keywordComponentRef = useRef()
+   const APIComponentRef = useRef()
 
    const {
       isLoading,
@@ -55,10 +57,10 @@ const MesagesUI = () => {
    }
 
    const handleAddKeyword = () => {
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         console.log(inputComponentRef.current?.getInput()?.trim())
-         dispatch(setKeywords(inputComponentRef.current.getInput()?.trim()))
-         inputComponentRef.current?.setText('')
+      if (keywordComponentRef.current.getInput()?.trim() !== '') {
+         console.log(keywordComponentRef.current?.getInput()?.trim())
+         dispatch(setKeywords(keywordComponentRef.current.getInput()?.trim()))
+         keywordComponentRef.current?.setText('')
       }
    }
 
@@ -92,7 +94,7 @@ const MesagesUI = () => {
       const link = document.createElement('a')
       link.setAttribute('href', encodedUri)
       // console.log("topic file name", topic)
-      link.setAttribute('download', `data_${new Date().getTime()}`.csv)
+      link.setAttribute('download', "data.csv");
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -100,8 +102,8 @@ const MesagesUI = () => {
 
    const handleAPIKey = () => {
       setIsDisabled(true)
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         dispatch(setAPIKey(inputComponentRef.current.getInput()?.trim()))
+      if (APIComponentRef.current.getInput()?.trim() !== '') {
+         dispatch(setAPIKey(APIComponentRef.current.getInput()?.trim()))
       }
    }
 
@@ -132,7 +134,7 @@ const MesagesUI = () => {
                                        type="password"
                                        onEdit={handleEdit}
                                        disableInputBox={isDisabled}
-                                       ref={inputComponentRef}
+                                       ref={APIComponentRef}
                                        handleBlur={handleAPIKey}
                                        isEditable={true}
                                     />
@@ -154,7 +156,7 @@ const MesagesUI = () => {
                                        placeHolder="Add keywords.."
                                        onAdd={handleAddKeyword}
                                        disableInputBox={disableInputBox}
-                                       ref={inputComponentRef}
+                                       ref={keywordComponentRef}
                                     />
                                  </Grid>
                               </Grid>
