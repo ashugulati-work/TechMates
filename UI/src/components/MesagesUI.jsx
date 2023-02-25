@@ -1,11 +1,14 @@
 import React, {Fragment, useEffect, useRef, useState} from 'react'
 import '../styles/styles.css'
 import {useDispatch, useSelector} from 'react-redux'
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import InputMessages from './InputMessages'
 import InputText from './InputText'
 import RowText from './RowText'
 import constant from '../config.json'
 import MainHeader from './MainHeader'
+import ExampleInput from './InputTextSuggestion';
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -83,7 +86,8 @@ const MesagesUI = () => {
       const encodedUri = encodeURI(csvContent)
       const link = document.createElement('a')
       link.setAttribute('href', encodedUri)
-      link.setAttribute('download', `${topic}.csv`)
+      // console.log("topic file name", topic)
+      link.setAttribute('download', `data_${new Date().getTime()}`.csv)
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -98,6 +102,7 @@ const MesagesUI = () => {
                   <Card>
                      <CardContent>
                         <Stack gap={3}>
+                        <ExampleInput/>
                            <div className="row">
                               <div className="col-4">
                                  <select
@@ -123,6 +128,8 @@ const MesagesUI = () => {
                                     onAdd={handleAddKeyword}
                                     disableInputBox={disableInputBox}
                                     ref={inputComponentRef}
+                                    tooltipId="keyword-tooltip" 
+                                    tooltipContent= "<h5>The generator will try to include <br/> these words in its output. <br/> Since it will usually plan ahead to include them, <br/> they can affect the text overall.<h5/>"
                                  />
                               </div>
                            </div>
@@ -133,7 +140,10 @@ const MesagesUI = () => {
                                     onAdd={handleAddSentences}
                                     disableInputBox={disableInputBox}
                                     ref={inputComponentRef}
+                                    tooltipId="my-tooltip" 
+                                    tooltipContent="hello-world"
                                  />
+                     
                               </div>
                            </div>
                            <ToneSelector handleToneChange={handleToneChange} selectedTone={tone} />
@@ -205,9 +215,9 @@ const MesagesUI = () => {
                            </div>
                         )}
                         {isLoading && (
-                           <>
-                              <RowText index="1" row="In Progress" />
+                           <> 
                               <div className="spinner"></div>
+                              <RowText index="1" row="In Progress" />
                               <RowText index="2" row="Generating Sentences...." />
                            </>
                         )}
