@@ -3,15 +3,13 @@ import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import AdbIcon from '@mui/icons-material/Adb'
-import Icons from '../assets/logo.svg'
+import Icons from '../assets/logo1.svg'
 
 const MainHeader = () => {
    return (
       <Box sx={{flexGrow: 1}}>
          <AppBar position="static">
             <Toolbar>
-               {/* <AdbIcon sx={{fontSize: '3rem', display: {xs: 'none', md: 'flex'}, mr: 1}} /> */}
                <img
                   src={Icons}
                   alt=""
