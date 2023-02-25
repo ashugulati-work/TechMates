@@ -3,9 +3,9 @@ import {getSentencesData} from './getData'
 
 const initialState = {
    form: {
-      topics:[],
-      keyword:"",
-      sentence:""
+      topics: [],
+      keyword: '',
+      sentence: ''
    },
    formData: {
       no_of_sentences: 5,
@@ -37,7 +37,7 @@ export const dataSlice = createSlice({
       },
       deleteSentence: (state, action) => {
          const indexToDelete = action.payload
-         state.formData.sentences.splice(indexToDelete, 1);
+         state.formData.sentences.splice(indexToDelete, 1)
       },
       setTopicValue: (state, action) => {
          state.formData.topic = action.payload
@@ -53,7 +53,7 @@ export const dataSlice = createSlice({
    extraReducers: (builder) => {
       builder.addCase(getSentencesData.pending, (state, action) => {
          console.log('Pending')
-        //  state.formData = initialState.formData
+         //  state.formData = initialState.formData
          state.error = initialState.error
          state.isLoading = true
       })
@@ -75,7 +75,14 @@ export const dataSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const {setForm, setSentencesCount, setSentences,deleteSentence, setTopicValue, setTone, setKeywords} =
-   dataSlice.actions
+export const {
+   setForm,
+   setSentencesCount,
+   setSentences,
+   deleteSentence,
+   setTopicValue,
+   setTone,
+   setKeywords
+} = dataSlice.actions
 
 export default dataSlice.reducer

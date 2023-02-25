@@ -21,11 +21,7 @@ import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
 
-const MesagesUI = ({
-   downloadFile,
-   downloadData,
-   downloadDataEmpty
-}) => {
+const MesagesUI = ({downloadFile, downloadData, downloadDataEmpty}) => {
    const {topics} = constant
    const dispatch = useDispatch()
    const inputComponentRef = useRef()
@@ -151,7 +147,10 @@ const MesagesUI = ({
                               no_of_sentences={no_of_sentences}
                            />
                            <form className="form-inline" onSubmit={submitFormData}>
-                              <button type="submit" className="long-button" style={{color: 'white'}}>
+                              <button
+                                 type="submit"
+                                 className="long-button"
+                                 style={{color: 'white'}}>
                                  Generate sentences
                               </button>
                            </form>

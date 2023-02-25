@@ -1,4 +1,4 @@
-import { Grid, Slider } from '@mui/material'
+import {Grid, Slider} from '@mui/material'
 import React from 'react'
 
 const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
