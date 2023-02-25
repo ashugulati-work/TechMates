@@ -1,16 +1,9 @@
 import os
 import openai
-from dotenv import load_dotenv
 from flask import Flask,request,jsonify
 from flask_cors import CORS
 from flask_caching import Cache
 
-
-# Load environment variables from the .env file
-load_dotenv()
-
-# Get the value of the OPENAI_API_KEY environment variable
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 input_sentences = []
 # output_sentences = []
@@ -76,7 +69,8 @@ def generate_sentences():
             'sentences' not in request.json or
             'tone' not in request.json or
             'topic' not in request.json or
-            'keywords' not in request.json):
+            'keywords' not in request.json or
+            'API_KEY' not in request.json):
        
         return jsonify({'message': "Please provide all the required fields"}), 400
 
@@ -86,6 +80,11 @@ def generate_sentences():
     tone = request.json['tone']
     topic_name = request.json['topic']
     keywords = request.json['keywords']
+    OPENAI_API_KEY = request.json['API_KEY']
+
+    openai.api_key = OPENAI_API_KEY
+    
+    
 
     # Generate the prompt for OpenAI
     prompt = generate_prompt(no_of_sentences, reference_sentences, tone, topic_name, keywords)
@@ -93,22 +92,29 @@ def generate_sentences():
     # NOTE: Uncomment the below code for openAI testing
     # and comment line 107, 108 and 109
     # Call OpenAI to generate the sentences
-    # openai_response = openai.Completion.create(
-    #     model='text-davinci-003',
-    #     prompt=prompt,
-    #     temperature=0.5,
-    #     max_tokens=3873,
-    #     stop=[str(no_of_sentences+1)],
-    # )
+
+    try:
+        openai_response = openai.Completion.create(
+            model='text-davinci-003',
+            prompt=prompt,
+            temperature=0.5,
+            max_tokens=3873,
+            stop=[str(no_of_sentences+1)],
+        )
+        print("API key is valid")
+        print("API KEY................", OPENAI_API_KEY)
+    except Exception as e:
+        print("API key is invalid",e)
+        return jsonify({'error': 'Unauthorized', 'message': 'Invalid API key, You can find your API key at https://platform.openai.com/account/api-keys.'}), 401
 
     # Parse the response and return the generated sentences
-    # generated_sentences = openai_response.choices[0]['text'].split('\n')
-    # output_sentences = [item for item in generated_sentences if item != ""]
+    generated_sentences = openai_response.choices[0]['text'].split('\n')
+    output_sentences = [item for item in generated_sentences if item != ""]
 
     # NOTE: code for testing API (to save the tokens)
-    output_sentences = []
-    for i in range(0, no_of_sentences):
-       output_sentences.append(reference_sentences[0])
+    # output_sentences = []
+    # for i in range(0, no_of_sentences):
+    #    output_sentences.append(reference_sentences[0])
 
     # Return the response and cache the result
     response = jsonify({'data': output_sentences, 'message': 'Successful'}), 200

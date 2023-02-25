@@ -6,6 +6,7 @@ import InputText from './InputText'
 import RowText from './RowText'
 import constant from '../config.json'
 import MainHeader from './MainHeader'
+import InputTextSuggestion from './InputTextSuggestion'
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -27,7 +28,9 @@ import TopicSelector from './TopicSelector'
 const MesagesUI = () => {
    const {topics} = constant
    const dispatch = useDispatch()
-   const inputComponentRef = useRef()
+   const sentenceInputRef = useRef()
+   const keywordInputRef = useRef()
+   const apiKeyInputRef = useRef()
 
    const {
       isLoading,
@@ -52,18 +55,18 @@ const MesagesUI = () => {
    }
 
    const handleAddKeyword = () => {
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         console.log(inputComponentRef.current?.getInput()?.trim())
-         dispatch(setKeywords(inputComponentRef.current.getInput()?.trim()))
-         inputComponentRef.current?.setText('')
+      if (keywordInputRef.current.getInput()?.trim() !== '') {
+         console.log(keywordInputRef.current?.getInput()?.trim())
+         dispatch(setKeywords(keywordInputRef.current.getInput()?.trim()))
+         keywordInputRef.current?.setText('')
       }
    }
 
    const handleAddSentences = () => {
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         console.log(inputComponentRef.current?.getInput()?.trim())
-         dispatch(setSentences(inputComponentRef.current.getInput()?.trim()))
-         inputComponentRef.current?.setText('')
+      if (sentenceInputRef.current.getInput()?.trim() !== '') {
+         console.log(sentenceInputRef.current?.getInput()?.trim())
+         dispatch(setSentences(sentenceInputRef.current.getInput()?.trim()))
+         sentenceInputRef.current?.setText('')
       }
    }
 
@@ -88,18 +91,19 @@ const MesagesUI = () => {
       const encodedUri = encodeURI(csvContent)
       const link = document.createElement('a')
       link.setAttribute('href', encodedUri)
-      link.setAttribute('download', `${topic}.csv`)
+      // console.log("topic file name", topic)
+      link.setAttribute('download', 'data.csv')
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
    }
 
    const handleAPIKey = () => {
-      if (inputComponentRef.current.getInput()?.length !== 0) {
+      if (apiKeyInputRef.current.getInput()?.length !== 0) {
          setIsDisabled(true)
       }
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         dispatch(setAPIKey(inputComponentRef.current.getInput()?.trim()))
+      if (apiKeyInputRef.current.getInput()?.trim() !== '') {
+         dispatch(setAPIKey(apiKeyInputRef.current.getInput()?.trim()))
       }
    }
 
@@ -130,7 +134,7 @@ const MesagesUI = () => {
                                        type="password"
                                        onEdit={handleEdit}
                                        disableInputBox={isDisabled}
-                                       ref={inputComponentRef}
+                                       ref={apiKeyInputRef}
                                        handleBlur={handleAPIKey}
                                        isEditable={true}
                                     />
@@ -152,7 +156,7 @@ const MesagesUI = () => {
                                        placeHolder="Add keywords.."
                                        onAdd={handleAddKeyword}
                                        disableInputBox={disableInputBox}
-                                       ref={inputComponentRef}
+                                       ref={keywordInputRef}
                                     />
                                  </Grid>
                               </Grid>
@@ -164,7 +168,9 @@ const MesagesUI = () => {
                                     placeHolder="Add sample sentences.."
                                     onAdd={handleAddSentences}
                                     disableInputBox={disableInputBox}
-                                    ref={inputComponentRef}
+                                    ref={sentenceInputRef}
+                                    tooltipId="my-tooltip"
+                                    tooltipContent="hello-world"
                                  />
                               </div>
                            </div>
@@ -235,8 +241,8 @@ const MesagesUI = () => {
                         )}
                         {isLoading && (
                            <>
-                              <RowText index="1" row="In Progress" />
                               <div className="spinner"></div>
+                              <RowText index="1" row="In Progress" />
                               <RowText index="2" row="Generating Sentences...." />
                            </>
                         )}

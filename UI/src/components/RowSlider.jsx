@@ -24,7 +24,7 @@ const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
                <Tooltip title="This is a maximum number of sentences to generate" arrow>
                   <TextField
                      size="small"
-                     style={{width: '25%'}}
+                     style={{width: '30%'}}
                      type="text"
                      disabled
                      value={no_of_sentences}
