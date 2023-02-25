@@ -1,122 +1,80 @@
-import React, {Fragment, useEffect, useState} from 'react'
+import React, {Fragment, useEffect, useRef, useState} from 'react'
 import '../styles/styles.css'
-import {connect} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
 import InputMessages from './InputMessages'
 import InputText from './InputText'
 import RowText from './RowText'
-import {
-   createInputMessages,
-   submitFormData,
-   downloadFile,
-   downloadDataEmpty
-} from '../actions/projectActions'
 import constant from '../config.json'
 import MainHeader from './MainHeader'
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
-import Slider from '@mui/material/Slider'
-import Grid from '@mui/material/Grid'
 import CardContent from '@mui/material/CardContent'
+import {
+   setKeywords,
+   setSentences,
+   setSentencesCount,
+   setTone,
+   setTopicValue
+} from '../app/features/dataSlice'
+import ToneSelector from './ToneSelector'
+import RowSlider from './RowSlider'
+import {getSentencesData} from '../app/features/getData'
 
-const MesagesUI = ({
-   createInputMessages,
-   submitFormData,
-   retriveMsg,
-   messages,
-   downloadFile,
-   downloadData,
-   downloadDataEmpty
-}) => {
-   const [inputValue, setInputValue] = useState({
-      inputMsg: ''
-   })
-   const [rowInput, setRowInput] = useState(5)
-   const [addMessageValue, setAddMessageValue] = useState(false)
-   const [plusBtnHide, setPlusBtnHide] = useState(true)
+const MesagesUI = ({downloadFile, downloadData, downloadDataEmpty}) => {
+   const {topics} = constant
+   const dispatch = useDispatch()
+   const inputComponentRef = useRef()
 
-   const [topic, setTopic] = useState([])
-   const [dropDownValue, setDropDownValue] = useState('')
+   const {
+      isLoading,
+      error,
+      retriveMsg,
+      formData: {topic, tone, no_of_sentences, keywords, sentences}
+   } = useSelector((state) => state.data)
+
    const [disableInputBox, setDisableInputBox] = useState(true)
-   const [showSpinner, setShowSpinner] = useState(false)
 
-   const [selectedTone, setSelectedTone] = useState('neutral')
-
-   const [keywords, setKeywords] = useState([])
-   const [newKeyword, setNewKeyword] = useState('')
-   const [plusBtnHideKeyword, setPlusBtnHideKeyword] = useState(true)
-
-   const handleNewKeywordChange = (event) => {
-      setPlusBtnHideKeyword(false)
-      setNewKeyword(event.target.value)
-   }
-
-   const handleAddKeyword = () => {
-      if (newKeyword.trim() !== '') {
-         setKeywords((prevKeywords) => [...prevKeywords, newKeyword.trim()])
-         console.log('keywords....', keywords)
-         setNewKeyword('')
+   const onOptionSelected = (e) => {
+      let targetValue = e.target.value
+      if (targetValue !== '') {
+         setDisableInputBox(false)
+         // TODO: Look whether last value stays
+         dispatch(setTopicValue(targetValue?.toLowerCase()))
+      } else {
+         setDisableInputBox(true)
       }
    }
 
-   const onChangeHandler = (event) => {
-      const keys = event.target.name
-      const values = event.target.value
-      setPlusBtnHide(false)
-      setInputValue((prevState, props) => ({
-         ...prevState,
-         [keys]: values
-      }))
+   const handleAddKeyword = () => {
+      if (inputComponentRef.current.getInput()?.trim() !== '') {
+         console.log(inputComponentRef.current?.getInput()?.trim())
+         dispatch(setKeywords(inputComponentRef.current.getInput()?.trim()))
+         inputComponentRef.current?.setText('')
+      }
+   }
+
+   const handleAddSentences = () => {
+      if (inputComponentRef.current.getInput()?.trim() !== '') {
+         console.log(inputComponentRef.current?.getInput()?.trim())
+         dispatch(setSentences(inputComponentRef.current.getInput()?.trim()))
+         inputComponentRef.current?.setText('')
+      }
+   }
+
+   function handleToneChange(event) {
+      dispatch(setTone(event.target.value))
    }
 
    const onChangeRowHandler = (event) => {
       const values = event.target.value
-      setRowInput(values)
+      dispatch(setSentencesCount(values))
    }
 
-   const {inputMsg} = inputValue
-   useEffect(() => {
-      if (inputMsg === '') {
-         setPlusBtnHide(true)
-      }
-      if (newKeyword === '') {
-         setPlusBtnHideKeyword(true)
-      }
-   })
-
-   useEffect(() => {
-      if (Object.keys(retriveMsg).length > 0) {
-         setShowSpinner(true)
-      }
-   }, [retriveMsg])
-
-   const addMessages = () => {
-      setAddMessageValue(true)
-      createInputMessages(inputValue)
-      setInputValue({
-         inputMsg: ''
-      })
-   }
-
-   const submitFormMessage = (event) => {
+   const submitFormData = (event) => {
       event.preventDefault()
-      console.log('keywords....', keywords)
-      // setKeywords([])
-      setShowSpinner(true)
-
-      if (Object.keys(messages).length > 0 && rowInput && dropDownValue) {
-         submitFormData(messages, rowInput, dropDownValue, selectedTone, keywords)
-      }
+      dispatch(getSentencesData({topic, tone, no_of_sentences, keywords, sentences}))
    }
-
-   useEffect(() => {
-      console.log('retriveMsg from use effect', retriveMsg)
-      console.log('message from use effect', messages)
-
-      if (Object.keys(retriveMsg).length > 0 && Object.keys(messages).length == 0) {
-         setShowSpinner(false)
-      }
-   }, [retriveMsg, messages])
 
    const downloadFileEventHandler = () => {
       downloadFile()
@@ -136,29 +94,6 @@ const MesagesUI = ({
       }
    }, [downloadData])
 
-   const onOptionClicked = (e) => {
-      let targetValue = e.target.value
-      console.log(
-         '🚀 ~ file: MesagesUI.jsx:140 ~ onOptionClicked ~ targetValue:',
-         targetValue?.toLowerCase()
-      )
-      if (targetValue !== '') {
-         setDisableInputBox(false)
-         setDropDownValue(targetValue?.toLowerCase())
-      } else {
-         setDisableInputBox(true)
-      }
-   }
-
-   function handleToneChange(event) {
-      setSelectedTone(event.target.value)
-   }
-
-   useEffect(() => {
-      let topicValue = constant.topic.map((value) => value.split(','))
-      setTopic(topicValue[0])
-   }, constant.topic)
-
    return (
       <Fragment>
          <MainHeader />
@@ -177,23 +112,22 @@ const MesagesUI = ({
                                        outline: 'none',
                                        width: '100%'
                                     }}
-                                    onChange={onOptionClicked}>
+                                    onChange={onOptionSelected}>
                                     <option value="">Select Topic</option>
-                                    {topic
-                                       ? topic.map((topicValue, index) => (
+                                    {topics
+                                       ? topics.map((topicValue, index) => (
                                             <option key={index}>{topicValue}</option>
                                          ))
                                        : ''}
                                  </select>
                               </div>
+
                               <div className="col-8">
                                  <InputText
                                     placeHolder="Add keywords.."
-                                    onHandleChange={handleNewKeywordChange}
-                                    onHandleClick={handleAddKeyword}
-                                    value={newKeyword}
+                                    onAdd={handleAddKeyword}
                                     disableInputBox={disableInputBox}
-                                    plusBtnHide={plusBtnHideKeyword}
+                                    ref={inputComponentRef}
                                  />
                               </div>
                            </div>
@@ -201,74 +135,22 @@ const MesagesUI = ({
                               <div className="col-12">
                                  <InputText
                                     placeHolder="Add sample sentences.."
-                                    onHandleChange={onChangeHandler}
-                                    onHandleClick={addMessages}
-                                    value={inputMsg}
+                                    onAdd={handleAddSentences}
                                     disableInputBox={disableInputBox}
-                                    plusBtnHide={plusBtnHide}
+                                    ref={inputComponentRef}
                                  />
                               </div>
                            </div>
-                           {/* {showSpinner ? <div className='spinner'></div> : ''} */}
-                           <div className="tone">
-                              <label>
-                                 <span className="tone__label_name">Tone: </span>
-                                 <input
-                                    type="radio"
-                                    name="tone"
-                                    value="negative"
-                                    checked={selectedTone === 'negative'}
-                                    onChange={handleToneChange}
-                                 />
-                                 <span className="tone__label">Negative</span>
-                              </label>
-                              <label>
-                                 <input
-                                    type="radio"
-                                    name="tone"
-                                    value="neutral"
-                                    checked={selectedTone === 'neutral'}
-                                    onChange={handleToneChange}
-                                 />
-                                 <span className="tone__label">Neutral</span>
-                              </label>
-                              <label>
-                                 <input
-                                    type="radio"
-                                    name="tone"
-                                    value="positive"
-                                    checked={selectedTone === 'positive'}
-                                    onChange={handleToneChange}
-                                 />
-                                 <span className="tone__label">Positive</span>
-                              </label>
-                           </div>
-                           <div id="generate-rows">
-                              <Grid container spacing={2} alignItems="center">
-                                 <Grid item>
-                                    <label className="tone__label_name">Generate Rows:</label>
-                                 </Grid>
-                                 <Grid item xs>
-                                    <Slider
-                                       id="myRange"
-                                       value={rowInput}
-                                       onChange={onChangeRowHandler}
-                                       aria-labelledby="input-slider"
-                                    />
-                                 </Grid>
-                                 <Grid item>
-                                    <input
-                                       style={{width: '40%'}}
-                                       type="text"
-                                       disabled
-                                       className="form-control range-value"
-                                       value={rowInput}
-                                    />
-                                 </Grid>
-                              </Grid>
-                           </div>
-                           <form className="form-inline" onSubmit={submitFormMessage}>
-                              <button type="submit" class="long-button" style={{color: 'white'}}>
+                           <ToneSelector handleToneChange={handleToneChange} selectedTone={tone} />
+                           <RowSlider
+                              onChangeRowHandler={onChangeRowHandler}
+                              no_of_sentences={no_of_sentences}
+                           />
+                           <form className="form-inline" onSubmit={submitFormData}>
+                              <button
+                                 type="submit"
+                                 className="long-button"
+                                 style={{color: 'white'}}>
                                  Generate sentences
                               </button>
                            </form>
@@ -301,10 +183,11 @@ const MesagesUI = ({
                      <CardContent>
                         <div className="row row-css">
                            <div className="col-lg-6 message-input">
-                              {addMessageValue && <InputMessages />}
+                              {sentences?.length !== 0 && <InputMessages />}
                            </div>
                         </div>
-                        {Object.keys(retriveMsg).length > 0 && (
+
+                        {retriveMsg.length > 0 && (
                            <div className="row download-row">
                               <div className="col-lg-6 download-col">
                                  <p className="download-para">Please download your file: </p>
@@ -326,7 +209,7 @@ const MesagesUI = ({
                               </div>
                            </div>
                         )}
-                        {showSpinner && (
+                        {isLoading && (
                            <>
                               <RowText index="1" row="In Progress" />
                               <div className="spinner"></div>
@@ -345,17 +228,4 @@ const MesagesUI = ({
    )
 }
 
-const mapStateToProps = (state) => {
-   return {
-      retriveMsg: state.projectReducer.retriveMsg,
-      messages: state.projectReducer.getInputMsg,
-      downloadData: state.projectReducer.downloadData
-   }
-}
-
-export default connect(mapStateToProps, {
-   downloadDataEmpty,
-   createInputMessages,
-   submitFormData,
-   downloadFile
-})(MesagesUI)
+export default MesagesUI

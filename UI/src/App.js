@@ -2,7 +2,8 @@ import React from 'react'
 import MesagesUI from './components/MesagesUI'
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 import {Provider} from 'react-redux'
-import {store} from './store'
+import {store} from './app/store'
+// import {store} from './store'
 
 function App() {
    return (
