@@ -170,3 +170,7 @@ input{
 .MuiTooltip-tooltip{
    font-size: 12px !important;
 }
+
+.MuiAccordionSummary-content{
+   margin: 10px 0 !important;
+}

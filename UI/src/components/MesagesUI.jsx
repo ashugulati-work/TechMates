@@ -1,9 +1,7 @@
 import React, {Fragment, useRef, useState} from 'react'
 import '../styles/styles.css'
 import {useDispatch, useSelector} from 'react-redux'
-import InputMessages from './InputMessages'
 import InputText from './InputText'
-import RowText from './RowText'
 import constant from '../config.json'
 import MainHeader from './MainHeader'
 import InputTextSuggestion from './InputTextSuggestion'
@@ -22,9 +20,17 @@ import {
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
-import {Button, Grid, Typography} from '@mui/material'
+import {
+   Accordion,
+   AccordionDetails,
+   AccordionSummary,
+   Button,
+   Grid,
+   Typography
+} from '@mui/material'
 import TopicSelector from './TopicSelector'
 import Result from './Result'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
 const MesagesUI = () => {
    const {topics} = constant
@@ -48,10 +54,10 @@ const MesagesUI = () => {
       let targetValue = e.target.value
       if (targetValue !== '') {
          setDisableInputBox(false)
-         // TODO: Look whether last value stays
          dispatch(setTopicValue(targetValue?.toLowerCase()))
       } else {
          setDisableInputBox(true)
+         dispatch(setTopicValue(targetValue))
       }
    }
 
@@ -105,11 +111,35 @@ const MesagesUI = () => {
          <Box className="container-fluid" marginY="64px" maxWidth="85%">
             <div className="row">
                <div className="col-6">
-                  <Card>
+                  <Card className="h-100">
                      <CardContent sx={{padding: '24px'}}>
                         <Stack gap={3}>
                            <div className="openai_key">
-                              <Grid container spacing={2} alignItems="center">
+                              <Accordion>
+                                 <AccordionSummary
+                                    style={{minHeight: '48px'}}
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header">
+                                    <Typography variant="h5" fontWeight="600">
+                                       OpenAI API Key:
+                                    </Typography>
+                                 </AccordionSummary>
+                                 <AccordionDetails>
+                                    <InputText
+                                       id="apikey-input"
+                                       placeHolder="Place your API Key"
+                                       type="password"
+                                       onEdit={handleEdit}
+                                       disableInputBox={isDisabled}
+                                       ref={apiKeyInputRef}
+                                       handleBlur={handleAPIKey}
+                                       isEditable={true}
+                                    />
+                                 </AccordionDetails>
+                              </Accordion>
+
+                              {/* <Grid container spacing={2} alignItems="center">
                                  <Grid item alignContent="center">
                                     <Typography variant="h5" fontWeight="600">
                                        OpenAI API Key:
@@ -127,7 +157,7 @@ const MesagesUI = () => {
                                        isEditable={true}
                                     />
                                  </Grid>
-                              </Grid>
+                              </Grid> */}
                            </div>
                            <div className="topic-selector">
                               <Grid container spacing={2} alignItems="center">
@@ -202,6 +232,7 @@ const MesagesUI = () => {
                      sentences={sentences}
                      isLoading={isLoading}
                      keywords={keywords}
+                     error={error}
                   />
                </div>
             </div>
