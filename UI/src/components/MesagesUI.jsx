@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useRef, useState} from 'react'
+import React, {Fragment, useRef, useState} from 'react'
 import '../styles/styles.css'
 import {useDispatch, useSelector} from 'react-redux'
 import InputMessages from './InputMessages'
@@ -21,7 +21,8 @@ import {
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
-import {Button, Grid, TextField, Typography} from '@mui/material'
+import {Button, Grid, Typography} from '@mui/material'
+import TopicSelector from './TopicSelector'
 
 const MesagesUI = () => {
    const {topics} = constant
@@ -122,6 +123,7 @@ const MesagesUI = () => {
                                  </Grid>
                                  <Grid item md>
                                     <InputText
+                                       id="apikey-input"
                                        placeHolder="Place your API Key"
                                        type="password"
                                        onEdit={handleEdit}
@@ -133,37 +135,30 @@ const MesagesUI = () => {
                                  </Grid>
                               </Grid>
                            </div>
-                           <div className="row">
-                              <div className="col-4">
-                                 <select
-                                    className="btn select-topic"
-                                    style={{
-                                       border: '1px solid #ccc',
-                                       outline: 'none',
-                                       width: '100%'
-                                    }}
-                                    onChange={onOptionSelected}>
-                                    <option value="">Select Topic</option>
-                                    {topics
-                                       ? topics.map((topicValue, index) => (
-                                            <option key={index}>{topicValue}</option>
-                                         ))
-                                       : ''}
-                                 </select>
-                              </div>
-
-                              <div className="col-8">
-                                 <InputText
-                                    placeHolder="Add keywords.."
-                                    onAdd={handleAddKeyword}
-                                    disableInputBox={disableInputBox}
-                                    ref={inputComponentRef}
-                                 />
-                              </div>
+                           <div className="topic-selector">
+                              <Grid container spacing={2} alignItems="center">
+                                 <Grid item>
+                                    <TopicSelector
+                                       menuItems={topics}
+                                       topic={topic}
+                                       onOptionSelected={onOptionSelected}
+                                    />
+                                 </Grid>
+                                 <Grid item md>
+                                    <InputText
+                                       id="keyword-input"
+                                       placeHolder="Add keywords.."
+                                       onAdd={handleAddKeyword}
+                                       disableInputBox={disableInputBox}
+                                       ref={inputComponentRef}
+                                    />
+                                 </Grid>
+                              </Grid>
                            </div>
                            <div className="row">
                               <div className="col-12">
                                  <InputText
+                                    id="sentence-input"
                                     placeHolder="Add sample sentences.."
                                     onAdd={handleAddSentences}
                                     disableInputBox={disableInputBox}
