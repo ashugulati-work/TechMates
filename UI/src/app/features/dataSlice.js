@@ -35,6 +35,10 @@ export const dataSlice = createSlice({
       setSentences: (state, action) => {
          state.formData.sentences.push(action.payload)
       },
+      deleteSentence: (state, action) => {
+         const indexToDelete = action.payload
+         state.formData.sentences.splice(indexToDelete, 1);
+      },
       setTopicValue: (state, action) => {
          state.formData.topic = action.payload
       },
@@ -71,7 +75,7 @@ export const dataSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const {setForm, setSentencesCount, setSentences, setTopicValue, setTone, setKeywords} =
+export const {setForm, setSentencesCount, setSentences,deleteSentence, setTopicValue, setTone, setKeywords} =
    dataSlice.actions
 
 export default dataSlice.reducer

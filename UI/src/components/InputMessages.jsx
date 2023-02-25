@@ -1,12 +1,12 @@
 import React from 'react'
 import '../styles/styles.css'
-import {useSelector} from 'react-redux'
+import {useDispatch, useSelector} from 'react-redux'
+import {deleteSentence} from '../app/features/dataSlice'
 
 const InputMessages = () => {
-   // TODO: Delete message functionality
-   const deleteMessage = (index) => {}
+   const dispatch = useDispatch()
    const {sentences} = useSelector((state) => state.data.formData)
-   
+
    return (
       <>
          {sentences.length === 0 ? (
@@ -18,7 +18,9 @@ const InputMessages = () => {
                      <li
                         key={index}
                         className="list-group-item list-group-item-action li-font-size">
-                        <span onClick={() => deleteMessage(index)} className="delete-icon">
+                        <span
+                           onClick={() => dispatch(deleteSentence(index))}
+                           className="delete-icon">
                            <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="16"
