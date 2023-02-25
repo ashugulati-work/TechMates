@@ -1,11 +1,14 @@
 import React, {Fragment, useRef, useState} from 'react'
 import '../styles/styles.css'
 import {useDispatch, useSelector} from 'react-redux'
+import "react-tooltip/dist/react-tooltip.css";
+import { Tooltip as ReactTooltip } from "react-tooltip";
 import InputMessages from './InputMessages'
 import InputText from './InputText'
 import RowText from './RowText'
 import constant from '../config.json'
 import MainHeader from './MainHeader'
+import InputTextSuggestion from './InputTextSuggestion';
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
@@ -28,6 +31,8 @@ const MesagesUI = () => {
    const {topics} = constant
    const dispatch = useDispatch()
    const inputComponentRef = useRef()
+   const keywordComponentRef = useRef()
+   const APIComponentRef = useRef()
 
    const {
       isLoading,
@@ -52,10 +57,10 @@ const MesagesUI = () => {
    }
 
    const handleAddKeyword = () => {
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         console.log(inputComponentRef.current?.getInput()?.trim())
-         dispatch(setKeywords(inputComponentRef.current.getInput()?.trim()))
-         inputComponentRef.current?.setText('')
+      if (keywordComponentRef.current.getInput()?.trim() !== '') {
+         console.log(keywordComponentRef.current?.getInput()?.trim())
+         dispatch(setKeywords(keywordComponentRef.current.getInput()?.trim()))
+         keywordComponentRef.current?.setText('')
       }
    }
 
@@ -88,7 +93,8 @@ const MesagesUI = () => {
       const encodedUri = encodeURI(csvContent)
       const link = document.createElement('a')
       link.setAttribute('href', encodedUri)
-      link.setAttribute('download', `${topic}.csv`)
+      // console.log("topic file name", topic)
+      link.setAttribute('download', "data.csv");
       document.body.appendChild(link)
       link.click()
       document.body.removeChild(link)
@@ -96,8 +102,8 @@ const MesagesUI = () => {
 
    const handleAPIKey = () => {
       setIsDisabled(true)
-      if (inputComponentRef.current.getInput()?.trim() !== '') {
-         dispatch(setAPIKey(inputComponentRef.current.getInput()?.trim()))
+      if (APIComponentRef.current.getInput()?.trim() !== '') {
+         dispatch(setAPIKey(APIComponentRef.current.getInput()?.trim()))
       }
    }
 
@@ -128,7 +134,7 @@ const MesagesUI = () => {
                                        type="password"
                                        onEdit={handleEdit}
                                        disableInputBox={isDisabled}
-                                       ref={inputComponentRef}
+                                       ref={APIComponentRef}
                                        handleBlur={handleAPIKey}
                                        isEditable={true}
                                     />
@@ -150,7 +156,7 @@ const MesagesUI = () => {
                                        placeHolder="Add keywords.."
                                        onAdd={handleAddKeyword}
                                        disableInputBox={disableInputBox}
-                                       ref={inputComponentRef}
+                                       ref={keywordComponentRef}
                                     />
                                  </Grid>
                               </Grid>
@@ -163,7 +169,10 @@ const MesagesUI = () => {
                                     onAdd={handleAddSentences}
                                     disableInputBox={disableInputBox}
                                     ref={inputComponentRef}
+                                    tooltipId="my-tooltip" 
+                                    tooltipContent="hello-world"
                                  />
+                     
                               </div>
                            </div>
                            <ToneSelector handleToneChange={handleToneChange} selectedTone={tone} />
@@ -232,9 +241,9 @@ const MesagesUI = () => {
                            </div>
                         )}
                         {isLoading && (
-                           <>
-                              <RowText index="1" row="In Progress" />
+                           <> 
                               <div className="spinner"></div>
+                              <RowText index="1" row="In Progress" />
                               <RowText index="2" row="Generating Sentences...." />
                            </>
                         )}
