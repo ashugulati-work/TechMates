@@ -15,7 +15,8 @@ import {
    setSentences,
    setSentencesCount,
    setTone,
-   setTopicValue
+   setTopicValue,
+   reset
 } from '../app/features/dataSlice'
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
@@ -197,11 +198,26 @@ const MesagesUI = () => {
                               onChangeRowHandler={onChangeRowHandler}
                               no_of_sentences={no_of_sentences}
                            />
-                           <form className="form-inline" onSubmit={submitFormData}>
-                              <Button type="submit" variant="contained" sx={{fontSize: '14px'}}>
-                                 Generate sentences
-                              </Button>
-                           </form>
+
+                           <Grid container spacing={2} alignItems="center">
+                              <Grid item>
+                                 <Button
+                                    onClick={submitFormData}
+                                    variant="contained"
+                                    sx={{fontSize: '14px'}}>
+                                    Generate sentences
+                                 </Button>
+                              </Grid>
+                              <Grid item md>
+                                 <Button
+                                    onClick={() => dispatch(reset())}
+                                    variant="outline"
+                                    sx={{fontSize: '14px'}}>
+                                    Reset
+                                 </Button>
+                              </Grid>
+                           </Grid>
+
                            <div className="form-inline">
                               {Object.keys(keywords).length > 0 && (
                                  <span className="tone__label_name">Keywords: </span>
