@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import CardContent from '@mui/material/CardContent'
 import {
+   setAPIKey,
    setKeywords,
    setSentences,
    setSentencesCount,
@@ -20,6 +21,7 @@ import {
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
+import {Button, Grid, TextField, Typography} from '@mui/material'
 
 const MesagesUI = () => {
    const {topics} = constant
@@ -34,6 +36,7 @@ const MesagesUI = () => {
    } = useSelector((state) => state.data)
 
    const [disableInputBox, setDisableInputBox] = useState(true)
+   const [isDisabled, setIsDisabled] = useState(false)
 
    const onOptionSelected = (e) => {
       let targetValue = e.target.value
@@ -89,6 +92,17 @@ const MesagesUI = () => {
       document.body.removeChild(link)
    }
 
+   const handleAPIKey = () => {
+      setIsDisabled(true)
+      if (inputComponentRef.current.getInput()?.trim() !== '') {
+         dispatch(setAPIKey(inputComponentRef.current.getInput()?.trim()))
+      }
+   }
+
+   const handleEdit = () => {
+      setIsDisabled(false)
+   }
+
    return (
       <Fragment>
          <MainHeader />
@@ -96,8 +110,28 @@ const MesagesUI = () => {
             <div className="row">
                <div className="col-6">
                   <Card>
-                     <CardContent>
+                     <CardContent sx={{padding: '24px'}}>
                         <Stack gap={3}>
+                           <div className="openai_key">
+                              <Grid container spacing={2} alignItems="center">
+                                 <Grid item alignContent="center">
+                                    <Typography variant="h5" fontWeight="600">
+                                       OpenAI API Key:
+                                    </Typography>
+                                 </Grid>
+                                 <Grid item md>
+                                    <InputText
+                                       placeHolder="Place your API Key"
+                                       type="password"
+                                       onEdit={handleEdit}
+                                       disableInputBox={isDisabled}
+                                       ref={inputComponentRef}
+                                       handleBlur={handleAPIKey}
+                                       isEditable={true}
+                                    />
+                                 </Grid>
+                              </Grid>
+                           </div>
                            <div className="row">
                               <div className="col-4">
                                  <select
@@ -142,12 +176,9 @@ const MesagesUI = () => {
                               no_of_sentences={no_of_sentences}
                            />
                            <form className="form-inline" onSubmit={submitFormData}>
-                              <button
-                                 type="submit"
-                                 className="long-button"
-                                 style={{color: 'white'}}>
+                              <Button type="submit" variant="contained" sx={{fontSize: '14px'}}>
                                  Generate sentences
-                              </button>
+                              </Button>
                            </form>
                            <div className="form-inline">
                               {Object.keys(keywords).length > 0 && (
@@ -175,7 +206,7 @@ const MesagesUI = () => {
                </div>
                <div className="col-6">
                   <Card className="h-100">
-                     <CardContent>
+                     <CardContent sx={{padding: '24px'}}>
                         <div className="row row-css">
                            <div className="col-lg-6 message-input">
                               {sentences?.length !== 0 && <InputMessages />}
@@ -211,14 +242,13 @@ const MesagesUI = () => {
                               <RowText index="2" row="Generating Sentences...." />
                            </>
                         )}
-                       {retriveMsg.length > 5 ? 
-                        retriveMsg.slice(0, 5).map((sentence, index) => {
-                        return <RowText index={index} row={sentence} keywords={keywords} />
-                        }) :
-                        retriveMsg.map((sentence, index) => {
-                           return <RowText index={index} row={sentence} keywords={keywords} />
-                        })
-                        }
+                        {retriveMsg.length > 5
+                           ? retriveMsg.slice(0, 5).map((sentence, index) => {
+                                return <RowText index={index} row={sentence} keywords={keywords} />
+                             })
+                           : retriveMsg.map((sentence, index) => {
+                                return <RowText index={index} row={sentence} keywords={keywords} />
+                             })}
                      </CardContent>
                   </Card>
                </div>

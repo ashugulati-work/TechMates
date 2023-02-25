@@ -5,6 +5,8 @@ const ToneSelector = ({handleToneChange, selectedTone}) => {
       <div className="tone">
          <label>
             <span className="tone__label_name">Tone: </span>
+         </label>
+         <label>
             <input
                type="radio"
                name="tone"
