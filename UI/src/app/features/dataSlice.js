@@ -2,6 +2,7 @@ import {createSlice} from '@reduxjs/toolkit'
 import {getSentencesData} from './getData'
 
 const initialState = {
+   API_KEY: '',
    form: {
       topics: [],
       keyword: '',
@@ -28,6 +29,9 @@ export const dataSlice = createSlice({
    reducers: {
       setForm: (state, action) => {
          state[action.payload.name] = action.payload.value
+      },
+      setAPIKey: (state, action) => {
+         state.API_KEY = action.payload
       },
       setSentencesCount: (state, action) => {
          state.formData.no_of_sentences = action.payload
@@ -77,6 +81,7 @@ export const dataSlice = createSlice({
 // Action creators are generated for each case reducer function
 export const {
    setForm,
+   setAPIKey,
    setSentencesCount,
    setSentences,
    deleteSentence,
