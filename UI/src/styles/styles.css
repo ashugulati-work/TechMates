@@ -174,3 +174,7 @@ input{
 .MuiAccordionSummary-content{
    margin: 10px 0 !important;
 }
+
+input.MuiInputBase-input{
+   padding-right: 40px;
+}

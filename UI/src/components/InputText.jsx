@@ -1,4 +1,4 @@
-import React, {useImperativeHandle, useState} from 'react'
+import React, {useEffect, useImperativeHandle, useState} from 'react'
 import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import '../styles/styles.css'
@@ -18,10 +18,11 @@ const InputText = React.forwardRef(
       ref
    ) => {
       const [input, setInput] = useState('')
-      const [plusBtnHideKeyword, setPlusBtnHideKeyword] = useState(true)
+      const [isDisabled, setIsDisabled] = useState(true)
 
       useImperativeHandle(ref, () => ({
          setText(data) {
+            console.log('🚀 ~ file: InputText.jsx:25 ~ setText ~ data:', data)
             setInput(data)
          },
 
@@ -31,36 +32,34 @@ const InputText = React.forwardRef(
       }))
 
       const onChangeHandler = (e) => {
-         setPlusBtnHideKeyword(false)
          setInput(e.target.value)
       }
+
+      useEffect(() => {
+         if (input?.length !== 0 && !disableInputBox) {
+            setIsDisabled(false)
+         } else {
+            setIsDisabled(true)
+         }
+      }, [input, disableInputBox])
+
       return (
          <div className="d-flex align-items-center position-relative">
-               <TextField
-                  sx={{width: '100%'}}
-                  size="small"
-                  id={id}
-                  type={type}
-                  variant="outlined"
-                  placeholder={placeHolder}
-                  onBlur={handleBlur}
-                  onChange={onChangeHandler}
-                  value={input}
-                  disabled={disableInputBox}
-               />
-            {/* <input
-            type={type}
-            disabled={disableInputBox}
-            className="form-control"
-            id="inputMsg"
-            placeholder={placeHolder}
-            value={input}
-            onChange={onChangeHandler}
-            name="inputMsg"
-         /> */}
+            <TextField
+               sx={{width: '100%'}}
+               size="small"
+               id={id}
+               type={type}
+               variant="outlined"
+               placeholder={placeHolder}
+               onBlur={handleBlur}
+               onChange={onChangeHandler}
+               value={input}
+               disabled={disableInputBox}
+            />
             {!isEditable && (
                <Button
-                  disabled={plusBtnHideKeyword}
+                  disabled={isDisabled}
                   sx={{right: '5px', height: '30px', width: '32px', minWidth: '32px'}}
                   id="plusBtn"
                   className="btn btn-sm plus-btn position-absolute"
@@ -71,7 +70,7 @@ const InputText = React.forwardRef(
 
             {isEditable && (
                <Button
-                  disabled={plusBtnHideKeyword}
+                  disabled={isDisabled}
                   sx={{right: '5px', height: '30px', width: '32px', minWidth: '32px'}}
                   id="plusBtn"
                   className="btn btn-sm plus-btn position-absolute"
