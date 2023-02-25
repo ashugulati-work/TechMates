@@ -8,7 +8,7 @@ import InputText from './InputText'
 import RowText from './RowText'
 import constant from '../config.json'
 import MainHeader from './MainHeader'
-import ExampleInput from './InputTextSuggestion';
+import InputTextSuggestion from './InputTextSuggestion';
 import Card from '@mui/material/Card'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
