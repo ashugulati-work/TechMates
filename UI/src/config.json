@@ -7,5 +7,5 @@
    "deleteMessage": "deleteMessage/",
    "getAllMessages": "getAllMessages",
    "downloadFile": "downloadFile",
-   "topic": ["Restaurant Review, Travel Planning, Topic 3"]
+   "topics": ["Restaurant Review", "Travel Planning", "Topic 3"]
 }

@@ -1,7 +1,24 @@
-import React from 'react'
+import React, {useEffect, useImperativeHandle, useState} from 'react'
 import '../styles/styles.css'
 
-function InputText(props) {
+const InputText = React.forwardRef((props, ref) => {
+   const [input, setInput] = useState('')
+   const [plusBtnHideKeyword, setPlusBtnHideKeyword] = useState(true)
+
+   useImperativeHandle(ref, () => ({
+      setText(data) {
+         setInput(data)
+      },
+
+      getInput() {
+         return input
+      }
+   }))
+
+   const onChangeHandler = (e) => {
+      setPlusBtnHideKeyword(false)
+      setInput(e.target.value)
+   }
    return (
       <div className="d-flex align-items-center">
          <input
@@ -11,19 +28,19 @@ function InputText(props) {
             id="inputMsg"
             placeholder={props.placeHolder}
             name="inputMsg"
-            onChange={props.onHandleChange}
-            value={props.value}
+            onChange={onChangeHandler}
+            value={input}
          />
          <button
             type="button"
-            disabled={props.plusBtnHide}
+            disabled={plusBtnHideKeyword}
             id="plusBtn"
             className="btn btn-sm plus-btn"
-            onClick={props.onHandleClick}>
+            onClick={props.onAdd}>
             <span className="glyphicon glyphicon-plus"></span>
          </button>
       </div>
    )
-}
+})
 
 export default InputText
