@@ -33,6 +33,27 @@ const Result = ({retriveMsg, sentences, isLoading, keywords, error}) => {
       )
    }
 
+   const DownloadRenderer = () => {
+      return (
+         <>
+            {retriveMsg.length > 0 && (
+               <Grid marginBottom="8px" container spacing={2} alignItems="center">
+                  <Grid item alignContent="center">
+                     <Typography variant="h5" fontWeight="600">
+                        Please download your file:
+                     </Typography>
+                  </Grid>
+                  <Grid item md>
+                     <Button onClick={downloadFileEventHandler}>
+                        <CloudDownloadIcon sx={{fontSize: '32px'}} />
+                     </Button>
+                  </Grid>
+               </Grid>
+            )}
+         </>
+      )
+   }
+
    return (
       <Card className="h-100">
          <CardContent sx={{padding: '24px'}} className="h-100">
@@ -44,21 +65,6 @@ const Result = ({retriveMsg, sentences, isLoading, keywords, error}) => {
                      </div>
                   </div>
 
-                  {retriveMsg.length > 0 && (
-                     <Grid marginBottom="8px" container spacing={2} alignItems="center">
-                        <Grid item alignContent="center">
-                           <Typography variant="h5" fontWeight="600">
-                              Please download your file:
-                           </Typography>
-                        </Grid>
-                        <Grid item md>
-                           <Button onClick={downloadFileEventHandler}>
-                              <CloudDownloadIcon sx={{fontSize: '32px'}} />
-                           </Button>
-                        </Grid>
-                     </Grid>
-                  )}
-
                   {isLoading ? (
                      <>
                         <div className="spinner"></div>
@@ -66,7 +72,10 @@ const Result = ({retriveMsg, sentences, isLoading, keywords, error}) => {
                         <RowText index="2" row="Generating Sentences...." />
                      </>
                   ) : (
-                     <ResultRenderer />
+                     <>
+                        <DownloadRenderer />
+                        <ResultRenderer />
+                     </>
                   )}
                </div>
             ) : (
