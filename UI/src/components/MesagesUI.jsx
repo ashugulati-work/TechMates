@@ -151,7 +151,7 @@ const MesagesUI = ({
                               no_of_sentences={no_of_sentences}
                            />
                            <form className="form-inline" onSubmit={submitFormData}>
-                              <button type="submit" class="long-button" style={{color: 'white'}}>
+                              <button type="submit" className="long-button" style={{color: 'white'}}>
                                  Generate sentences
                               </button>
                            </form>
