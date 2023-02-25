@@ -22,7 +22,7 @@ const TopicSelector = ({topic = '', menuItems = [], onOptionSelected}) => {
             sx={{height: '100%', width: '100%', fontSize: '16px'}}
             inputProps={{'aria-label': 'Without label'}}>
             <MenuItem value="" sx={{fontSize: '14px'}}>
-               <em>Select Topic</em>
+               Select Topic
             </MenuItem>
             {menuItems.map((value, index) => (
                <MenuItem key={index} sx={{fontSize: '14px'}} value={value}>

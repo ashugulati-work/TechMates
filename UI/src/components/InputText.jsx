@@ -1,9 +1,22 @@
-import {Button, TextField} from '@mui/material'
 import React, {useImperativeHandle, useState} from 'react'
+import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button'
 import '../styles/styles.css'
 
 const InputText = React.forwardRef(
-   ({placeHolder, disableInputBox, onAdd, type = 'text', id = 'inputBox', isEditable,handleBlur,onEdit}, ref) => {
+   (
+      {
+         placeHolder,
+         disableInputBox,
+         onAdd,
+         type = 'text',
+         id = 'inputBox',
+         isEditable,
+         handleBlur,
+         onEdit
+      },
+      ref
+   ) => {
       const [input, setInput] = useState('')
       const [plusBtnHideKeyword, setPlusBtnHideKeyword] = useState(true)
 
@@ -23,19 +36,18 @@ const InputText = React.forwardRef(
       }
       return (
          <div className="d-flex align-items-center position-relative">
-            <TextField
-               sx={{width: '100%'}}
-               size="small"
-               id={id}
-               type={type}
-               variant="outlined"
-               placeholder={placeHolder}
-               onBlur={handleBlur}
-               onChange={onChangeHandler}
-               value={input}
-               disabled={disableInputBox}
-            />
-
+               <TextField
+                  sx={{width: '100%'}}
+                  size="small"
+                  id={id}
+                  type={type}
+                  variant="outlined"
+                  placeholder={placeHolder}
+                  onBlur={handleBlur}
+                  onChange={onChangeHandler}
+                  value={input}
+                  disabled={disableInputBox}
+               />
             {/* <input
             type={type}
             disabled={disableInputBox}

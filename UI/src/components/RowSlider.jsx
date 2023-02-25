@@ -1,4 +1,4 @@
-import {Grid, Slider} from '@mui/material'
+import {Grid, Input, Slider, TextField, Tooltip} from '@mui/material'
 import React from 'react'
 
 const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
@@ -14,16 +14,23 @@ const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
                   value={no_of_sentences}
                   onChange={onChangeRowHandler}
                   aria-labelledby="input-slider"
+                  valueLabelDisplay="auto"
+                  step={1}
+                  min={1}
+                  max={100}
                />
             </Grid>
             <Grid item>
-               <input
-                  style={{width: '40%'}}
-                  type="text"
-                  disabled
-                  className="form-control range-value"
-                  value={no_of_sentences}
-               />
+               <Tooltip title="This is a maximum number of sentences to generate" arrow>
+                  <TextField
+                     size="small"
+                     style={{width: '30%'}}
+                     type="text"
+                     disabled
+                     value={no_of_sentences}
+
+                  />
+               </Tooltip>
             </Grid>
          </Grid>
       </div>
