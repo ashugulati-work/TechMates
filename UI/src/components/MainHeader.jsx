@@ -15,10 +15,10 @@ const MainHeader = () => {
                   alt=""
                   height="30px"
                   width="30px"
-                  style={{marginRight: '1rem', color: 'darkblue'}}
+                  style={{marginRight: '1rem'}}
                />
                <Typography variant="h4" component="div" sx={{flexGrow: 1, fontWeight: '600'}}>
-                  SynthAI
+                  Synth<span style={{color: 'RGB(255,248,189)'}}>AI</span>
                </Typography>
             </Toolbar>
          </AppBar>
