@@ -2,7 +2,7 @@
    "ContentType": {
       "Content-Type": "application/json"
    },
-   "SERVER_HOST_AND_PORT": "http://localhost:5000",
+   "SERVER_HOST_AND_PORT": "https://synth-ai-dev.vercel.app ",
    "createInputMessages": "createInputMessages",
    "deleteMessage": "deleteMessage/",
    "getAllMessages": "getAllMessages",
