@@ -119,6 +119,13 @@ const MesagesUI = () => {
       validated()
    }, [topic, tone, no_of_sentences, keywords, sentences, API_KEY])
 
+   const onResetData = (e) => {
+      // apiKeyInputRef.current.setText('')
+      keywordInputRef.current.setText('')
+      sentenceInputRef.current.setText('')
+      dispatch(resetData())
+   }
+
    return (
       <Fragment>
          <MainHeader />
@@ -213,7 +220,7 @@ const MesagesUI = () => {
                               </Grid>
                               <Grid item md>
                                  <Button
-                                    onClick={() => dispatch(resetData())}
+                                    onClick={(e) => onResetData(e)}
                                     variant="outline"
                                     sx={{fontSize: '14px'}}>
                                     Reset
