@@ -95,7 +95,9 @@ const MesagesUI = () => {
    }
 
    const handleAPIKey = () => {
-      setIsDisabled(true)
+      if (inputComponentRef.current.getInput()?.length !== 0) {
+         setIsDisabled(true)
+      }
       if (inputComponentRef.current.getInput()?.trim() !== '') {
          dispatch(setAPIKey(inputComponentRef.current.getInput()?.trim()))
       }
