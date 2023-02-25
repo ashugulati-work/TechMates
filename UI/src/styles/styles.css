@@ -161,3 +161,8 @@
 .tone__label input[type='radio'] {
    display: none;
 }
+
+
+input{
+   font-size: 16px !important;
+}
