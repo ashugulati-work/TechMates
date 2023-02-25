@@ -31,6 +31,7 @@ const MesagesUI = () => {
    const {
       isLoading,
       error,
+      API_KEY,
       retriveMsg,
       formData: {topic, tone, no_of_sentences, keywords, sentences}
    } = useSelector((state) => state.data)
@@ -76,7 +77,7 @@ const MesagesUI = () => {
 
    const submitFormData = (event) => {
       event.preventDefault()
-      dispatch(getSentencesData({topic, tone, no_of_sentences, keywords, sentences}))
+      dispatch(getSentencesData({topic, tone, no_of_sentences, keywords, sentences, API_KEY}))
       // dispatch(reset())
    }
 
