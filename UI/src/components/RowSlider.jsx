@@ -1,4 +1,4 @@
-import {Grid, Input, Slider, TextField, Tooltip} from '@mui/material'
+import {Grid, Slider, TextField, Tooltip, Typography} from '@mui/material'
 import React from 'react'
 
 const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
@@ -6,9 +6,11 @@ const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
       <div id="generate-rows">
          <Grid container spacing={2} alignItems="center">
             <Grid item>
-               <label className="tone__label_name">Generate Rows:</label>
+               <Typography variant="h5" fontSize="15px" fontWeight={600}>
+                  Generate Rows:
+               </Typography>
             </Grid>
-            <Grid item xs>
+            <Grid item xs md>
                <Slider
                   id="myRange"
                   value={no_of_sentences}
@@ -24,11 +26,10 @@ const RowSlider = ({onChangeRowHandler, no_of_sentences}) => {
                <Tooltip title="This is a maximum number of sentences to generate" arrow>
                   <TextField
                      size="small"
-                     style={{width: '30%'}}
+                     style={{minWidth: '30%', maxWidth:'30%'}}
                      type="text"
                      disabled
                      value={no_of_sentences}
-
                   />
                </Tooltip>
             </Grid>

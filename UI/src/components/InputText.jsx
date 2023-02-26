@@ -56,6 +56,7 @@ const InputText = React.forwardRef(
                onChange={onChangeHandler}
                value={input}
                disabled={disableInputBox}
+               className="inputText"
             />
             {!isEditable && (
                <Button

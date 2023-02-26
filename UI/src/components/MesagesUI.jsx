@@ -16,12 +16,13 @@ import {
    setSentencesCount,
    setTone,
    setTopicValue,
-   resetData
+   resetData,
+   deleteKeyword
 } from '../app/features/dataSlice'
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
-import {Button, Grid} from '@mui/material'
+import {Button, Chip, Grid, ListItem, Typography} from '@mui/material'
 import TopicSelector from './TopicSelector'
 import Result from './Result'
 import AccordionWrapper from './AccordionWrapper'
@@ -230,20 +231,29 @@ const MesagesUI = () => {
 
                            <div className="form-inline">
                               {Object.keys(keywords).length > 0 && (
-                                 <span className="tone__label_name">Keywords: </span>
+                                 <Typography variant="h5" fontSize="15px" fontWeight={600} marginRight="1rem">
+                                    Keywords:
+                                 </Typography>
                               )}
                               <ul style={{listStyle: 'none', margin: 0, padding: 0}}>
                                  {keywords.map((keyword, index) => (
                                     <li
                                        key={index}
-                                       className="row-element"
                                        style={{
                                           display: 'inline-block',
-                                          margin: '0 5px',
-                                          padding: '4px 8px',
-                                          borderRadius: '8px'
+                                          margin: '0 5px'
                                        }}>
-                                       {keyword}
+                                       <Chip
+                                          size="medium"
+                                          sx={{
+                                             fontSize: '14px',
+                                             backgroundColor: '#DDEDFD',
+                                             color: '#114B97'
+                                          }}
+                                          key={index}
+                                          label={keyword}
+                                          onDelete={() => dispatch(deleteKeyword(index))}
+                                       />
                                     </li>
                                  ))}
                               </ul>
