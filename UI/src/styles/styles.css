@@ -135,11 +135,10 @@
 .tone {
    display: flex;
 }
-.tone label {
+/* .tone label {
    display: flex;
    align-items: center;
-   /* margin-right: 10px; */
-}
+} */
 .tone__label {
    display: inline-block;
    padding: 2px 8px;
@@ -175,6 +174,10 @@ input{
    margin: 10px 0 !important;
 }
 
-input.MuiInputBase-input{
+.inputText .MuiInputBase-input{
    padding-right: 40px;
+}
+
+.MuiFormControlLabel-root span {
+   font-size: 15px !important;
 }
