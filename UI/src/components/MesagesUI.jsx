@@ -22,10 +22,11 @@ import {
 import ToneSelector from './ToneSelector'
 import RowSlider from './RowSlider'
 import {getSentencesData} from '../app/features/getData'
-import {Button, Chip, Grid, ListItem, Typography} from '@mui/material'
+import {Button, Chip, Grid, Link, ListItem, Typography} from '@mui/material'
 import TopicSelector from './TopicSelector'
 import Result from './Result'
 import AccordionWrapper from './AccordionWrapper'
+import SuggestionsList from './Suggestions'
 
 const MesagesUI = () => {
    const {topics} = constant
@@ -44,6 +45,11 @@ const MesagesUI = () => {
 
    const [disableInputBox, setDisableInputBox] = useState(true)
    const [isDisabled, setIsDisabled] = useState(false)
+
+   const Suggestions = [
+      {topic: 'restaurant review', keyword: 'decor', sentence: 'Book a hotel with nice ambience'},
+      {topic: 'travel planning', keyword: 'flight', sentence: 'Book a flight to Italy'}
+   ]
 
    const onOptionSelected = (e) => {
       let targetValue = e.target.value
@@ -127,6 +133,16 @@ const MesagesUI = () => {
       dispatch(resetData())
    }
 
+   const [showSuggestions, setShowSuggestions] = useState(false)
+
+   const handleSuggestionClick = (suggestion) => {
+      dispatch(setTopicValue(suggestion?.topic))
+      setDisableInputBox(false)
+      keywordInputRef.current.setText(suggestion?.keyword)
+      sentenceInputRef.current.setText(suggestion?.sentence)
+      setShowSuggestions(false)
+   }
+
    return (
       <Fragment>
          <MainHeader />
@@ -149,26 +165,6 @@ const MesagesUI = () => {
                                     isEditable={true}
                                  />
                               </AccordionWrapper>
-
-                              {/* <Grid container spacing={2} alignItems="center">
-                                 <Grid item alignContent="center">
-                                    <Typography variant="h5" fontWeight="600">
-                                       OpenAI API Key:
-                                    </Typography>
-                                 </Grid>
-                                 <Grid item md>
-                                    <InputText
-                                       id="apikey-input"
-                                       placeHolder="Place your API Key"
-                                       type="password"
-                                       onEdit={handleEdit}
-                                       disableInputBox={isDisabled}
-                                       ref={apiKeyInputRef}
-                                       handleBlur={handleAPIKey}
-                                       isEditable={true}
-                                    />
-                                 </Grid>
-                              </Grid> */}
                            </div>
                            <div className="topic-selector">
                               <Grid container spacing={2} alignItems="center">
@@ -192,15 +188,32 @@ const MesagesUI = () => {
                            </div>
                            <div className="row">
                               <div className="col-12">
-                                 <InputText
-                                    id="sentence-input"
-                                    placeHolder="Add sample sentences.."
-                                    onAdd={handleAddSentences}
-                                    disableInputBox={disableInputBox}
-                                    ref={sentenceInputRef}
-                                    tooltipId="my-tooltip"
-                                    tooltipContent="hello-world"
-                                 />
+                                 <div className="test position-relative">
+                                    <InputText
+                                       id="sentence-input"
+                                       placeHolder="Add sample sentences.."
+                                       onAdd={handleAddSentences}
+                                       disableInputBox={disableInputBox}
+                                       ref={sentenceInputRef}
+                                       tooltipId="my-tooltip"
+                                       tooltipContent="hello-world"
+                                    />
+                                    <Link
+                                       href="#"
+                                       className="position-absolute"
+                                       underline="hover"
+                                       style={{right: '2px', fontSize: '14px'}}
+                                       onClick={() => setShowSuggestions(!showSuggestions)}>
+                                       Try an Example
+                                    </Link>
+                                    {showSuggestions && (
+                                       <SuggestionsList
+                                          suggestions={Suggestions}
+                                          onClick={handleSuggestionClick}
+                                          setShowSuggestions={setShowSuggestions}
+                                       />
+                                    )}
+                                 </div>
                               </div>
                            </div>
                            <ToneSelector handleToneChange={handleToneChange} selectedTone={tone} />
@@ -231,7 +244,11 @@ const MesagesUI = () => {
 
                            <div className="form-inline">
                               {Object.keys(keywords).length > 0 && (
-                                 <Typography variant="h5" fontSize="15px" fontWeight={600} marginRight="1rem">
+                                 <Typography
+                                    variant="h5"
+                                    fontSize="15px"
+                                    fontWeight={600}
+                                    marginRight="1rem">
                                     Keywords:
                                  </Typography>
                               )}
