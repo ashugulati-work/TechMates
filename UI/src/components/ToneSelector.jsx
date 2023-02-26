@@ -20,6 +20,7 @@ const ToneSelector = ({handleToneChange, selectedTone}) => {
                      name="row-radio-buttons-group">
                      {radioButtons.map((name, index) => (
                         <FormControlLabel
+                           key={index}
                            value={name.toLowerCase()}
                            control={
                               <Radio name="tone" checked={selectedTone === name.toLowerCase()} />
