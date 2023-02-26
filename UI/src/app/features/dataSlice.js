@@ -52,6 +52,10 @@ export const dataSlice = createSlice({
       setKeywords: (state, action) => {
          state.formData.keywords.push(action.payload)
       },
+      deleteKeyword: (state, action) => {
+         const indexToDelete = action.payload
+         state.formData.keywords.splice(indexToDelete, 1)
+      },
       resetData: (state) => {
          state.formData = initialState.formData
          state.retriveMsg = initialState.retriveMsg
@@ -93,6 +97,7 @@ export const {
    setTopicValue,
    setTone,
    setKeywords,
+   deleteKeyword,
    reset,
    resetData
 } = dataSlice.actions

@@ -1,41 +1,36 @@
+import {FormControl, FormControlLabel, Grid, Radio, RadioGroup, Typography} from '@mui/material'
 import React from 'react'
 
 const ToneSelector = ({handleToneChange, selectedTone}) => {
+   const radioButtons = ['Positive', 'Neutral', 'Negative']
    return (
       <div className="tone">
-         <label>
-            <span className="tone__label_name">Tone: </span>
-         </label>
-         <label>
-            <input
-               type="radio"
-               name="tone"
-               value="negative"
-               checked={selectedTone === 'negative'}
-               onChange={handleToneChange}
-            />
-            <span className="tone__label">Negative</span>
-         </label>
-         <label>
-            <input
-               type="radio"
-               name="tone"
-               value="neutral"
-               checked={selectedTone === 'neutral'}
-               onChange={handleToneChange}
-            />
-            <span className="tone__label">Neutral</span>
-         </label>
-         <label>
-            <input
-               type="radio"
-               name="tone"
-               value="positive"
-               checked={selectedTone === 'positive'}
-               onChange={handleToneChange}
-            />
-            <span className="tone__label">Positive</span>
-         </label>
+         <Grid container gap={3} alignItems="center">
+            <Grid item>
+               <Typography variant="h5" fontSize="15px" fontWeight={600}>
+                  Tone:
+               </Typography>
+            </Grid>
+            <Grid item alignItems="center">
+               <FormControl>
+                  <RadioGroup
+                     onChange={handleToneChange}
+                     row
+                     aria-labelledby="demo-row-radio-buttons-group-label"
+                     name="row-radio-buttons-group">
+                     {radioButtons.map((name, index) => (
+                        <FormControlLabel
+                           value={name.toLowerCase()}
+                           control={
+                              <Radio name="tone" checked={selectedTone === name.toLowerCase()} />
+                           }
+                           label={name}
+                        />
+                     ))}
+                  </RadioGroup>
+               </FormControl>
+            </Grid>
+         </Grid>
       </div>
    )
 }
